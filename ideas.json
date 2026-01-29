@@ -4,7 +4,10 @@
     "title": "another idea",
     "description": "what the heck",
     "createdAt": "1/25/2026",
-    "tags": []
+    "tags": [
+      "test",
+      "funny"
+    ]
   },
   {
     "id": "0b2f7207-858d-448f-a5bc-4afd19570e40",
