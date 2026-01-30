@@ -42,5 +42,3 @@ export default class Task {
 }
 
 
-
-let test = new Task(1)
