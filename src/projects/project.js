@@ -1,5 +1,7 @@
 import Task from './task.js'
-class Project {
+import {colors} from '../utils.js'
+
+export default class Project {
     constructor(title, description) {
         this.title = title
         this.description = description
@@ -7,6 +9,7 @@ class Project {
         this.tags = []
         this.tasks = []
         this.dueDate = null
+        this.highImportance = true
     }
 
     addTag(tag) {
@@ -20,5 +23,27 @@ class Project {
         this.tasks.push(newTask)
     }
 
+    listTasks() {
+        
+        this.tasks.forEach((t, index) => {
+            let taskStatus = ""
+            if (t.completed) {
+                taskStatus = `${colors.brightgreen}\u2713${colors.reset}`
+            } else {
+                taskStatus =  `${colors.brightred}\u2717${colors.reset}`
+            }
+            console.log(`[${colors.cyan}${index + 1}${colors.reset}] - ${t.title} (${taskStatus})`)
+        })
+    }
+
+    setTaskAsCompletedByIndex(index) {
+        this.tasks[index - 1].markAsCompleted()
+    }
+
+    viewTaskByIndex(index) {
+        const task = this.tasks[index - 1]
+        console.log(task)
+    }
 
 }
+
