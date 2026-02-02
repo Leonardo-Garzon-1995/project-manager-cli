@@ -1,5 +1,7 @@
 import fs from "fs"
-import Idea from "./ideas/idea.js"
+
+import Project from "./projects/project.js"
+import Task from "./projects/task.js"
 
 
 export default class StorageService {
@@ -14,12 +16,20 @@ export default class StorageService {
         if (!raw) return []
 
         const data = JSON.parse(raw)
-        return data.map(i => {
-            const idea = new Idea(i.title, i.description)
-            idea.id = i.id
-            idea.createdAt = i.createdAt
-            idea.tags = i.tags
-            return idea
+        return data.map(p => {
+            const project = new Project(p.title, p.description)
+            project.createdAt = p.createdAt
+            project.dueDate = p.dueDate
+            project.highImportance = p.highImportance
+            project.tags = p.tags
+            p.tasks.map(t => {
+                const task = new Task(t.title)
+                task.createdAt = t.createdAt
+                task.dueDate = t.dueDate
+                task.completed = t.completed
+                project.tasks.push(task)
+            })
+            return project
         })
     }
 }

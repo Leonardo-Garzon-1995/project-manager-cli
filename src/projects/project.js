@@ -1,6 +1,10 @@
 import Task from './task.js'
 import {colors} from '../utils.js'
 
+import readline from 'node:readline/promises'
+import { stdin as input, stdout as output } from 'node:process'
+
+
 export default class Project {
     constructor(title, description) {
         this.title = title
@@ -9,18 +13,44 @@ export default class Project {
         this.tags = []
         this.tasks = []
         this.dueDate = null
-        this.highImportance = true
+        this.highImportance = false
     }
-
+    
+    // Project affected-directly methods
     addTag(tag) {
         if (typeof tag !== 'string') return
         if (this.tags.includes(tag)) return
         this.tags.push(tag)
     }
 
-    addTask(title) {
+    // Tasks-affedted methods
+
+    async addTask() {
+        const rl = readline.createInterface({ input, output, terminal: false })
+
+        let title = await rl.question("Enter task title: ")
+        while (!title || typeof title !== 'string') {
+            console.log("A tile is required and must be a string")
+            title = await rl.question("Enter task title: ")
+        }
+        let dueDate = await rl.question("Enter due date (YYYY-MM-DD): ")
+        if (dueDate === "next") {
+            dueDate = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString()
+        }
+        while (!dueDate || typeof dueDate !== 'string') {
+            console.log("A due date is required and must be a string")
+            dueDate = await rl.question("Enter due date (YYYY-MM-DD): ")
+        }
+
         const newTask = new Task(title)
+        newTask.dueDate = new Date(dueDate).toLocaleDateString()
         this.tasks.push(newTask)
+
+        rl.close()
+    }
+
+    markAsCompletedByIndex(index) {
+        this.tasks[index - 1].markAsCompleted()
     }
 
     listTasks() {
@@ -42,7 +72,14 @@ export default class Project {
 
     viewTaskByIndex(index) {
         const task = this.tasks[index - 1]
-        console.log(task)
+        console.log("")
+        console.log(`________TASK________`.padStart(28, " "))
+        console.log(`
+        Title: ${colors.cyan}${task.title}${colors.reset}
+        Posted: ${colors.cyan}${new Date(task.createdAt).toLocaleDateString()}${colors.reset}
+        Due Date: ${colors.cyan}${task.dueDate || "No due date"}${colors.reset}
+        Completed: ${task.completed ? `${colors.brightgreen}\u2713${colors.reset}` : `${colors.brightred}\u2717${colors.reset}`}
+            `)
     }
 
 }
