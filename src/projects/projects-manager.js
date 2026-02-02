@@ -1,32 +1,85 @@
 import Project from './project.js'
-
+import StorageService from '../storage-service.js'
 import {colors} from '../utils.js'
-class ProjectsManager {
-    constructor() {
-        this.projects = []
+
+import readline from 'node:readline/promises'
+import { stdin as input, stdout as output } from 'node:process'
+export default class ProjectsManager {
+    constructor(filePath) {
+        this.projects = StorageService.load(filePath)
     }
 
-    addProject(title, description) {
+    // Project related methods
+    async addProject(filePath) {
+        const rl = readline.createInterface({ input, output, terminal: false })
+
+        let title = await rl.question("Enter project title: ")
+        while (!title || typeof title !== 'string') {
+            console.log("A tile is required and must be a string")
+            title = rl.question("Enter project title: ")
+        }
+        let description = await rl.question("Enter project description: ")
+        while (!description || typeof description !== 'string') {
+            console.log("A description is required and must be a string")
+            description = await rl.question("Enter project description: ")
+        }
         const project = new Project(title, description)
         this.projects.push(project)
+
+        StorageService.save(filePath, this.projects)
+
+        rl.close()
     }
 
+    async addTaskToProjectByIndex(filePath, projectIndex) {
+        await this.projects[projectIndex - 1].addTask()
+
+        StorageService.save(filePath, this.projects)
+    }
+
+    // Tasks related methods
+    listTasksByProjectIndex(index) {
+        this.projects[index - 1].listTasks()
+        console.log("")
+        process.exit(0)
+
+    }
+
+    // manager related methods
     listProjects() {
         this.projects.forEach((p, index) => {
+            const indexPlusOne = index + 1
             if (p.highImportance) {
-                console.log(`[${colors.cyan}${index}${colors.reset}] - ${p.title} (${colors.brightgreen}\u2191${colors.reset})`)
+                console.log(`[${colors.cyan}${indexPlusOne}${colors.reset}] - ${p.title} (${colors.brightgreen}\u2191${colors.reset})`)
             } else {
-                console.log(`[${colors.cyan}${index}${colors.reset}] - ${p.title} (\u2193)`)
+                console.log(`[${colors.cyan}${indexPlusOne}${colors.reset}] - ${p.title} (\u2193)`)
             }
         })
+        console.log("")
+        process.exit(0)
+    }
+    
+
+    viewTaskByIndex(projectIndex, taskIndex) {
+        this.projects[projectIndex - 1].viewTaskByIndex(taskIndex)
+        process.exit(0)
+    }
+
+    viewProjectByIndex(index) {
+        const project = this.projects[index - 1]
+
+        const description = project.description.length > 25 ? `${project.description.slice(0, 30)}...` : project.description
+        console.log("")
+        console.log(`_______PROJECT_______`.padStart(29, " "))
+        console.log(`
+        Title: ${colors.cyan}${project.title}${colors.reset}
+        Description: ${colors.cyan}${description}${colors.reset}
+        Tasks: ${project.tasks.length}
+        Posted: ${colors.cyan}${project.createdAt}${colors.reset}
+        Due Date: ${colors.cyan}${project.dueDate || "No due date"}${colors.reset}
+        importance: ${project.highImportance ? `${colors.brightgreen}\u2713${colors.reset}` : `${colors.brightred}\u2717${colors.reset}`}
+        `)
+        process.exit(0)
     }
 }
 
-const test = new ProjectsManager()
-test.addProject("My first project", "This is my first project")
-test.addProject("My second project", "This is my second project")
-test.addProject("My third project", "This is my third project")
-test.addProject("My fourth project", "This is my fourth project")
-test.listProjects()
-
-console.log(test)

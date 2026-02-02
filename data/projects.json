@@ -1,0 +1,51 @@
+[
+  {
+    "title": "My first project",
+    "description": "This is gonna be an awesome project",
+    "createdAt": "1/31/2026",
+    "tags": [],
+    "tasks": [
+      {
+        "title": "Clean your face",
+        "createdAt": "1/31/2026, 9:48:58 AM",
+        "completed": true,
+        "dueDate": "2/1/2026"
+      },
+      {
+        "title": "slap your face",
+        "createdAt": "1/31/2026, 9:53:19 AM",
+        "completed": false,
+        "dueDate": "2/1/2026"
+      }
+    ],
+    "dueDate": null,
+    "highImportance": true
+  },
+  {
+    "title": "My second project",
+    "description": "This is another random project idea",
+    "createdAt": "1/31/2026",
+    "tags": [],
+    "tasks": [],
+    "dueDate": null,
+    "highImportance": false
+  },
+  {
+    "title": "My third project",
+    "description": "jajajajja",
+    "createdAt": "1/31/2026",
+    "tags": [],
+    "tasks": [],
+    "dueDate": null,
+    "highImportance": false
+  },
+  {
+    "title": "my fourth project",
+    "description": "hello there",
+    "createdAt": "1/31/2026",
+    "tags": [],
+    "tasks": [],
+    "dueDate": null,
+    "highImportance": false
+  }
+]
