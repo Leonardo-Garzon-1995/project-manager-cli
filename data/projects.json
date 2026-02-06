@@ -1,51 +1,76 @@
 [
   {
-    "title": "My first project",
-    "description": "This is gonna be an awesome project",
-    "createdAt": "1/31/2026",
+    "title": "cli project manager",
+    "description": "This is meant to be a project that helps organize an keep track of projects i have in mind",
+    "createdAt": "2/5/2026",
+    "dueDate": null,
+    "highImportance": true,
     "tags": [],
     "tasks": [
       {
-        "title": "Clean your face",
-        "createdAt": "1/31/2026, 9:48:58 AM",
-        "completed": true,
-        "dueDate": "2/1/2026"
+        "title": "work on setUpDueDate method",
+        "createdAt": "2/5/2026, 8:22:42 PM",
+        "completed": false,
+        "dueDate": "2/6/2026"
       },
       {
-        "title": "slap your face",
-        "createdAt": "1/31/2026, 9:53:19 AM",
+        "title": "add feedback responses when using commands for confirmation or error",
+        "createdAt": "2/5/2026, 8:23:33 PM",
         "completed": false,
-        "dueDate": "2/1/2026"
+        "dueDate": "2/6/2026"
+      },
+      {
+        "title": "Add validation for commands",
+        "createdAt": "2/5/2026, 8:24:45 PM",
+        "completed": false,
+        "dueDate": "2/6/2026"
+      },
+      {
+        "title": "push content to github, first utils then the rest",
+        "createdAt": "2/5/2026, 8:34:56 PM",
+        "completed": false,
+        "dueDate": "2/6/2026"
+      },
+      {
+        "title": "random task",
+        "createdAt": "2/5/2026, 8:36:44 PM",
+        "completed": true,
+        "dueDate": "2/6/2026"
       }
-    ],
-    "dueDate": null,
-    "highImportance": true
+    ]
   },
   {
-    "title": "My second project",
-    "description": "This is another random project idea",
-    "createdAt": "1/31/2026",
-    "tags": [],
-    "tasks": [],
+    "title": "mcro",
+    "description": "cli macro commands meant to be use in the terminal",
+    "createdAt": "2/5/2026",
     "dueDate": null,
-    "highImportance": false
+    "highImportance": false,
+    "tags": [],
+    "tasks": [
+      {
+        "title": "add validation",
+        "createdAt": "2/5/2026, 8:29:27 PM",
+        "completed": false,
+        "dueDate": "2/6/2026"
+      }
+    ]
   },
   {
-    "title": "My third project",
-    "description": "jajajajja",
-    "createdAt": "1/31/2026",
-    "tags": [],
-    "tasks": [],
+    "title": "cli-task-app",
+    "description": "simple cli task manager",
+    "createdAt": "2/5/2026",
     "dueDate": null,
-    "highImportance": false
+    "highImportance": false,
+    "tags": [],
+    "tasks": []
   },
   {
-    "title": "my fourth project",
-    "description": "hello there",
-    "createdAt": "1/31/2026",
-    "tags": [],
-    "tasks": [],
+    "title": "workout plan ",
+    "description": "create a workout to get jacked",
+    "createdAt": "2/5/2026",
     "dueDate": null,
-    "highImportance": false
+    "highImportance": false,
+    "tags": [],
+    "tasks": []
   }
 ]

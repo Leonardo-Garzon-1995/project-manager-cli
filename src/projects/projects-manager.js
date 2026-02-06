@@ -9,6 +9,11 @@ export default class ProjectsManager {
         this.projects = StorageService.load(filePath)
     }
 
+    clearAllProjects(filePath) {
+        this.projects = []
+        StorageService.save(filePath, this.projects)
+    }
+
     // Project related methods
     async addProject(filePath) {
         const rl = readline.createInterface({ input, output, terminal: false })
@@ -45,25 +50,24 @@ export default class ProjectsManager {
 
     }
 
+    viewTaskByIndex(projectIndex, taskIndex) {
+        this.projects[projectIndex - 1].viewTaskByIndex(taskIndex)
+        process.exit(0)
+    }
+
     // manager related methods
     listProjects() {
         this.projects.forEach((p, index) => {
             const indexPlusOne = index + 1
-            if (p.highImportance) {
-                console.log(`[${colors.cyan}${indexPlusOne}${colors.reset}] - ${p.title} (${colors.brightgreen}\u2191${colors.reset})`)
-            } else {
-                console.log(`[${colors.cyan}${indexPlusOne}${colors.reset}] - ${p.title} (\u2193)`)
-            }
+            const highImportance = p.highImportance ? `${colors.brightgreen}\u2191${colors.reset}` : `\u2193`
+            const numberOfTasks = p.tasks.length > 0 ? `{${colors.brightyellow}${p.tasks.length}${colors.reset}}` : ``
+            console.log(`[${colors.cyan}${indexPlusOne}${colors.reset}] - ${p.title} (${highImportance}) ${numberOfTasks}`)
+            
         })
         console.log("")
         process.exit(0)
     }
     
-
-    viewTaskByIndex(projectIndex, taskIndex) {
-        this.projects[projectIndex - 1].viewTaskByIndex(taskIndex)
-        process.exit(0)
-    }
 
     viewProjectByIndex(index) {
         const project = this.projects[index - 1]

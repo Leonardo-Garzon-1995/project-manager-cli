@@ -10,10 +10,11 @@ export default class Project {
         this.title = title
         this.description = description
         this.createdAt = new Date().toLocaleDateString()
-        this.tags = []
-        this.tasks = []
         this.dueDate = null
         this.highImportance = false
+        this.tags = []
+        this.tasks = []
+        
     }
     
     // Project affected-directly methods
@@ -49,7 +50,7 @@ export default class Project {
         rl.close()
     }
 
-    markAsCompletedByIndex(index) {
+    markTaskAsCompletedByIndex(index) {
         this.tasks[index - 1].markAsCompleted()
     }
 
