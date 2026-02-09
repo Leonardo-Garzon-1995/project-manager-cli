@@ -1,73 +1,133 @@
 [
   {
     "title": "cli project manager",
-    "description": "This is meant to be a project that helps organize an keep track of projects i have in mind",
-    "createdAt": "2/5/2026",
+    "description": "a cli app to manage projects",
+    "createdAt": "2/6/2026",
     "dueDate": null,
     "highImportance": true,
     "tags": [],
     "tasks": [
       {
-        "title": "work on setUpDueDate method",
-        "createdAt": "2/5/2026, 8:22:42 PM",
+        "title": "push changes to repo, add feat delete task",
+        "createdAt": "2/6/2026, 9:18:55 AM",
         "completed": false,
-        "dueDate": "2/6/2026"
+        "dueDate": "2/7/2026"
       },
       {
-        "title": "add feedback responses when using commands for confirmation or error",
-        "createdAt": "2/5/2026, 8:23:33 PM",
+        "title": "add validation",
+        "createdAt": "2/6/2026, 9:21:24 AM",
         "completed": false,
-        "dueDate": "2/6/2026"
+        "dueDate": "2/7/2026"
       },
       {
-        "title": "Add validation for commands",
-        "createdAt": "2/5/2026, 8:24:45 PM",
+        "title": "add feedback for the diferent methods",
+        "createdAt": "2/6/2026, 9:21:50 AM",
         "completed": false,
-        "dueDate": "2/6/2026"
+        "dueDate": "2/7/2026"
       },
       {
-        "title": "push content to github, first utils then the rest",
-        "createdAt": "2/5/2026, 8:34:56 PM",
+        "title": "add GUI for better visualization",
+        "createdAt": "2/6/2026, 10:45:42 AM",
         "completed": false,
-        "dueDate": "2/6/2026"
+        "dueDate": "2/7/2026"
       },
       {
-        "title": "random task",
-        "createdAt": "2/5/2026, 8:36:44 PM",
-        "completed": true,
-        "dueDate": "2/6/2026"
+        "title": "add a method that returns the tasks due to an specific date",
+        "createdAt": "2/6/2026, 11:11:08 AM",
+        "completed": false,
+        "dueDate": "2/7/2026"
+      },
+      {
+        "title": "add 'deleteTask' command to the displayHelp func",
+        "createdAt": "2/6/2026, 11:14:09 AM",
+        "completed": false,
+        "dueDate": "2/7/2026"
       }
     ]
   },
   {
-    "title": "mcro",
-    "description": "cli macro commands meant to be use in the terminal",
-    "createdAt": "2/5/2026",
+    "title": "cli task manager",
+    "description": "A simple app to manage daily tasks ",
+    "createdAt": "2/6/2026",
     "dueDate": null,
     "highImportance": false,
     "tags": [],
     "tasks": [
       {
-        "title": "add validation",
-        "createdAt": "2/5/2026, 8:29:27 PM",
+        "title": "test case scenarios",
+        "createdAt": "2/6/2026, 10:46:25 AM",
         "completed": false,
-        "dueDate": "2/6/2026"
+        "dueDate": "2/7/2026"
       }
     ]
   },
   {
-    "title": "cli-task-app",
-    "description": "simple cli task manager",
-    "createdAt": "2/5/2026",
+    "title": "visitors manager software",
+    "description": "a software to manage the visitors in our house",
+    "createdAt": "2/6/2026",
+    "dueDate": null,
+    "highImportance": true,
+    "tags": [],
+    "tasks": [
+      {
+        "title": "review and test project",
+        "createdAt": "2/6/2026, 11:12:01 AM",
+        "completed": false,
+        "dueDate": "2/7/2026"
+      }
+    ]
+  },
+  {
+    "title": "Learn Node and Express ",
+    "description": "realted tasks about the node course ",
+    "createdAt": "2/6/2026",
     "dueDate": null,
     "highImportance": false,
     "tags": [],
     "tasks": []
   },
   {
-    "title": "workout plan ",
-    "description": "create a workout to get jacked",
-    "createdAt": "2/5/2026",
+    "title": "mcro",
+    "description": "mcro is a cli for accesing macros directly from the terminal",
+    "createdAt": "2/8/2026",
+    "dueDate": null,
+    "highImportance": false,
+    "tags": [],
+    "tasks": [
+      {
+        "title": "test code (case scenarios)",
+        "createdAt": "2/8/2026, 2:53:54 PM",
+        "completed": false,
+        "dueDate": "2/9/2026"
+      }
+    ]
+  },
+  {
+    "title": "DSA notes",
+    "description": "Organized repo with all i need to know about DSA and examples in js, py and c++",
+    "createdAt": "2/8/2026",
+    "dueDate": null,
+    "highImportance": false,
+    "tags": [],
+    "tasks": [
+      {
+        "title": "check notes for Arrays make sure everything is complete and covered",
+        "createdAt": "2/8/2026, 2:59:20 PM",
+        "completed": false,
+        "dueDate": "2/9/2026"
+      },
+      {
+        "title": "check notes for linked-list, singly LL",
+        "createdAt": "2/8/2026, 3:00:20 PM",
+        "completed": false,
+        "dueDate": "2/9/2026"
+      }
+    ]
+  },
+  {
+    "title": "LEARN REACT.JS",
+    "description": "keep track of my journey learning react ",
+    "createdAt": "2/8/2026",
     "dueDate": null,
     "highImportance": false,
     "tags": [],

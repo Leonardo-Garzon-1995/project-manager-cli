@@ -4,6 +4,7 @@ import {colors} from '../utils.js'
 
 import readline from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
+
 export default class ProjectsManager {
     constructor(filePath) {
         this.projects = StorageService.load(filePath)
@@ -48,6 +49,14 @@ export default class ProjectsManager {
         console.log("")
         process.exit(0)
 
+    }
+
+    deleteTask(filePath, pIndex, tIndex) {
+        const updatedtasks = this.projects[pIndex - 1].deleteTaskByIndex(tIndex)
+        this.projects[pIndex -1].tasks = updatedtasks
+        
+        StorageService.save(filePath, this.projects)
+        process.exit(0)
     }
 
     viewTaskByIndex(projectIndex, taskIndex) {
