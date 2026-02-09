@@ -39,6 +39,10 @@ switch(command) {
     case "-vt":
         manager.viewTaskByIndex(args[0], args[1])
         break;
+    case "delete-task":
+    case "-dt":
+        manager.deleteTask(FILE, args[0], args[1])
+        break;
     case "clear-projects":
     case "-cp":
         manager.clearAllProjects(FILE)

@@ -67,6 +67,12 @@ export default class Project {
         })
     }
 
+    deleteTaskByIndex(i) {
+        const filtered = this.tasks.filter((_, index) => index !== i - 1)
+        this.tasks = filtered
+        return this.tasks
+    }
+
     setTaskAsCompletedByIndex(index) {
         this.tasks[index - 1].markAsCompleted()
     }
