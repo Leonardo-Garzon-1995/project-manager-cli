@@ -8,12 +8,6 @@
     "tags": [],
     "tasks": [
       {
-        "title": "push changes to repo, add feat delete task",
-        "createdAt": "2/6/2026, 9:18:55 AM",
-        "completed": false,
-        "dueDate": "2/7/2026"
-      },
-      {
         "title": "add validation",
         "createdAt": "2/6/2026, 9:21:24 AM",
         "completed": false,
@@ -38,10 +32,10 @@
         "dueDate": "2/7/2026"
       },
       {
-        "title": "add 'deleteTask' command to the displayHelp func",
-        "createdAt": "2/6/2026, 11:14:09 AM",
+        "title": "push changes - add GUI and feedback messages",
+        "createdAt": "2/9/2026, 6:16:21 PM",
         "completed": false,
-        "dueDate": "2/7/2026"
+        "dueDate": "2/10/2026"
       }
     ]
   },
@@ -132,5 +126,48 @@
     "highImportance": false,
     "tags": [],
     "tasks": []
+  },
+  {
+    "title": "test project",
+    "description": "test",
+    "createdAt": "2/9/2026",
+    "dueDate": null,
+    "highImportance": false,
+    "tags": [],
+    "tasks": []
+  },
+  {
+    "title": "vault ",
+    "description": "a project to ecrypt files with crypto js, and decryption through a cryptographic key generate with a password and a salt message",
+    "createdAt": "2/9/2026",
+    "dueDate": null,
+    "highImportance": false,
+    "tags": [],
+    "tasks": [
+      {
+        "title": "test examples",
+        "createdAt": "2/9/2026, 6:18:17 PM",
+        "completed": false,
+        "dueDate": "2/10/2026"
+      },
+      {
+        "title": "configure path to creatation and deletion of files",
+        "createdAt": "2/9/2026, 6:19:07 PM",
+        "completed": false,
+        "dueDate": "2/10/2026"
+      },
+      {
+        "title": "manage access through the cli",
+        "createdAt": "2/9/2026, 6:19:40 PM",
+        "completed": false,
+        "dueDate": "2/10/2026"
+      },
+      {
+        "title": "details for configuration",
+        "createdAt": "2/9/2026, 6:20:09 PM",
+        "completed": false,
+        "dueDate": "2/10/2026"
+      }
+    ]
   }
 ]

@@ -18,6 +18,17 @@ const colors = {
     reset: "\x1b[0m",
 };
 
+// Formatting
+function displayBanner(title, text) {
+    console.log(colors.cyan)
+    console.log("╔" + "═".repeat(40) + "╗");
+    console.log("║ " + colors.reset + title.padEnd(39) + colors.cyan + "║");
+    console.log("║ " + colors.reset + text.padEnd(39) + colors.cyan + "║");
+    console.log("╚" + "═".repeat(40) + "╝" + colors.reset);
+    console.log("")
+
+}
+// Help messages
 function displayHelp() {
     console.log(`   ${colors.green}USAGE:${colors.reset}`)
     console.log(`       ${colors.brightyellow}pro${colors.reset} <command> [options]\n`);
@@ -29,10 +40,13 @@ function displayHelp() {
     console.log(`       ${colors.cyan}view-project, -vp${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `View a project by index`);
     console.log(`       ${colors.cyan}view-task, -vt${colors.gray} <project-index> <task-index>${colors.reset}`.padEnd(70, " ") + `View a task by index`);
     console.log(`       ${colors.cyan}clear-projects${colors.reset}`.padEnd(65, " ") + `Clear all projects`);
+    console.log(`       ${colors.cyan}delete-task, -dt${colors.gray} <project-index> <task-index>${colors.reset}`.padEnd(70, " ") + `Delete a task by index`);
     console.log("")
 
 }
+
 export {
     colors,
-    displayHelp
+    displayHelp,
+    displayBanner
 }
