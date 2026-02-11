@@ -8,34 +8,22 @@
     "tags": [],
     "tasks": [
       {
-        "title": "add validation",
-        "createdAt": "2/6/2026, 9:21:24 AM",
-        "completed": false,
-        "dueDate": "2/7/2026"
-      },
-      {
-        "title": "add feedback for the diferent methods",
-        "createdAt": "2/6/2026, 9:21:50 AM",
-        "completed": false,
-        "dueDate": "2/7/2026"
-      },
-      {
-        "title": "add GUI for better visualization",
-        "createdAt": "2/6/2026, 10:45:42 AM",
-        "completed": false,
-        "dueDate": "2/7/2026"
-      },
-      {
         "title": "add a method that returns the tasks due to an specific date",
         "createdAt": "2/6/2026, 11:11:08 AM",
         "completed": false,
         "dueDate": "2/7/2026"
       },
       {
-        "title": "push changes - add GUI and feedback messages",
-        "createdAt": "2/9/2026, 6:16:21 PM",
+        "title": "push - add delete-project command",
+        "createdAt": "2/10/2026, 5:23:57 AM",
         "completed": false,
-        "dueDate": "2/10/2026"
+        "dueDate": "2/13/2026"
+      },
+      {
+        "title": "add toggle methods for completed tasks and importance of projects",
+        "createdAt": "2/10/2026, 5:30:11 AM",
+        "completed": false,
+        "dueDate": "2/11/2026"
       }
     ]
   },
@@ -115,6 +103,12 @@
         "createdAt": "2/8/2026, 3:00:20 PM",
         "completed": false,
         "dueDate": "2/9/2026"
+      },
+      {
+        "title": "push - new changes and notes",
+        "createdAt": "2/10/2026, 5:58:27 PM",
+        "completed": false,
+        "dueDate": "2/11/2026"
       }
     ]
   },
@@ -122,15 +116,6 @@
     "title": "LEARN REACT.JS",
     "description": "keep track of my journey learning react ",
     "createdAt": "2/8/2026",
-    "dueDate": null,
-    "highImportance": false,
-    "tags": [],
-    "tasks": []
-  },
-  {
-    "title": "test project",
-    "description": "test",
-    "createdAt": "2/9/2026",
     "dueDate": null,
     "highImportance": false,
     "tags": [],

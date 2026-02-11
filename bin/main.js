@@ -14,42 +14,50 @@ const [, , command, ...args] = process.argv
 
 const manager = new ProjectsManager(FILE)
 
-switch(command) {
-    case "add-project":
-    case "-ap":
-        manager.addProject(FILE)
-        break;
-    case "ls-projects":
-    case "-lp":
-        manager.listProjects()
-        break;
-    case "add-task":
-    case "-at":
-        manager.addTaskToProjectByIndex(FILE, args[0])
-        break;
-    case "ls-tasks":
-    case "-lt":
-        manager.listTasksByProjectIndex(args[0])
-        break;
-    case "view-project":
-    case "-vp":
-        manager.viewProjectByIndex(args[0])
-        break;
-    case "view-task":
-    case "-vt":
-        manager.viewTaskByIndex(args[0], args[1])
-        break;
-    case "delete-task":
-    case "-dt":
-        manager.deleteTask(FILE, args[0], args[1])
-        break;
-    case "clear-projects":
-    case "-cp":
-        manager.clearAllProjects(FILE)
-        break;
-    default:
-        console.log("Not a valid argument")
-        displayHelp()
-        process.exit(0)
-        break;
+function main() {
+    switch(command) {
+        case "add-project":
+        case "-ap":
+            manager.addProject(FILE)
+            break;
+        case "ls-projects":
+        case "-lp":
+            manager.listProjects()
+            break;
+        case "add-task":
+        case "-at":
+            manager.addTaskToProjectByIndex(FILE, args[0])
+            break;
+        case "ls-tasks":
+        case "-lt":
+            manager.listTasksByProjectIndex(args[0])
+            break;
+        case "view-project":
+        case "-vp":
+            manager.viewProjectByIndex(args[0])
+            break;
+        case "view-task":
+        case "-vt":
+            manager.viewTaskByIndex(args[0], args[1])
+            break;
+        case "delete-task":
+        case "-dt":
+            manager.deleteTask(FILE, args[0], args[1])
+            break;
+        case "clear-projects":
+        case "-cp":
+            manager.clearAllProjects(FILE)
+            break;
+        case "delete-project":
+        case "-dp":
+            manager.deleteProjectByIndex(FILE, args[0])
+            break;
+        default:
+            console.log("Not a valid argument")
+            displayHelp()
+            process.exit(0)
+            break;
+    }
 }
+
+main()

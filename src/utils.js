@@ -18,6 +18,7 @@ const colors = {
     reset: "\x1b[0m",
 };
 
+
 // Formatting
 function displayBanner(title, text) {
     console.log(colors.cyan)
@@ -41,6 +42,7 @@ function displayHelp() {
     console.log(`       ${colors.cyan}view-task, -vt${colors.gray} <project-index> <task-index>${colors.reset}`.padEnd(70, " ") + `View a task by index`);
     console.log(`       ${colors.cyan}clear-projects${colors.reset}`.padEnd(65, " ") + `Clear all projects`);
     console.log(`       ${colors.cyan}delete-task, -dt${colors.gray} <project-index> <task-index>${colors.reset}`.padEnd(70, " ") + `Delete a task by index`);
+    console.log(`       ${colors.cyan}delete-project, -dp${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `Delete a project by index`);
     console.log("")
 
 }

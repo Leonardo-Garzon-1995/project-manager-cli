@@ -10,17 +10,6 @@ export default class ProjectsManager {
         this.projects = StorageService.load(filePath)
     }
 
-    clearAllProjects(filePath) {
-        try {
-            this.projects = []
-            StorageService.save(filePath, this.projects)
-
-            console.log(`\n${colors.green}\u2713 AllProjects  have beencleared successfully!${colors.reset}`)
-        } catch (error) {
-            console.log(error, error.message )
-        }
-    }
-
     // Project related methods
     async addProject(filePath) {
         const rl = readline.createInterface({ input, output, terminal: false })
@@ -88,9 +77,14 @@ export default class ProjectsManager {
         process.exit(0)
     }
 
-    // manager related methods
+    // manager direct related methods
     listProjects() {
         displayBanner("YOUR PROJECTS:", "")
+
+        if (this.projects.length === 0) {
+            console.log("No projects found.")
+            process.exit(0)
+        }
         this.projects.forEach((p, index) => {
             const indexPlusOne = index + 1
             const highImportance = p.highImportance ? `${colors.brightgreen}\u2191${colors.reset}` : `\u2193`
@@ -101,8 +95,32 @@ export default class ProjectsManager {
         console.log("")
         process.exit(0)
     }
-    
 
+    deleteProjectByIndex(filePath, index) {
+        try {
+            const filtered = this.projects.filter((_, i) => i !== index - 1)
+            this.projects = filtered
+
+            StorageService.save(filePath, this.projects)
+            console.log(`\n${colors.green}\u2713 Project deleted successfully!${colors.reset}`)
+            process.exit(0)
+        } catch (error) {
+            console.log(error, error.message )
+        }
+
+    }
+
+    clearAllProjects(filePath) {
+        try {
+            this.projects = []
+            StorageService.save(filePath, this.projects)
+
+            console.log(`\n${colors.green}\u2713 AllProjects  have been cleared successfully!${colors.reset}`)
+        } catch (error) {
+            console.log(error, error.message )
+        }
+    }
+    
     viewProjectByIndex(index) {
         const project = this.projects[index - 1]
 

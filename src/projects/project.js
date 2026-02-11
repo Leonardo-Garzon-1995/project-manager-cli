@@ -55,7 +55,12 @@ export default class Project {
     }
 
     listTasks() {
-        
+
+        if (this.tasks.length === 0) {
+            console.log("No tasks found for this project.")
+            return
+        }
+
         this.tasks.forEach((t, index) => {
             let taskStatus = ""
             if (t.completed) {
