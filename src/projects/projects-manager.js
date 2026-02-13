@@ -37,6 +37,10 @@ export default class ProjectsManager {
     }
 
     async addTaskToProjectByIndex(filePath, projectIndex) {
+        if (!this.projects || !this.projects[projectIndex - 1]) {
+            console.log("This project does not exist. Try a different project or create a new project.")
+            process.exit(0)
+        }
         try {
             await this.projects[projectIndex - 1].addTask()
             StorageService.save(filePath, this.projects)
@@ -45,16 +49,29 @@ export default class ProjectsManager {
         } catch (error) {
             console.log(error, error.message )
         }
-        
     }
 
     // Tasks related methods
     listTasksByProjectIndex(index) {
-        const proName = `${index} - ${this.projects[index - 1].title}`
-        displayBanner("TASKS FOR:", proName)
-        this.projects[index - 1].listTasks()
-        console.log("")
-        process.exit(0)
+        const regex = /[a-z]/i
+        if (regex.test(index)) {
+            console.log('Index must be a number.')
+            process.exit(0)
+        }
+        if (!this.projects[index - 1]) {
+            console.log(`There is not a project at index ${index}`)
+            process.exit(0)
+        }
+
+        try{
+            const proName = `${index} - ${this.projects[index - 1].title}`
+            displayBanner("TASKS FOR:", proName)
+            this.projects[index - 1].listTasks()
+            console.log("")
+            process.exit(0)
+        } catch (error) {
+            console.log(error, error.message)
+        }
 
     }
 
@@ -82,7 +99,7 @@ export default class ProjectsManager {
         displayBanner("YOUR PROJECTS:", "")
 
         if (this.projects.length === 0) {
-            console.log("No projects found.")
+            console.log("No projects found.\n")
             process.exit(0)
         }
         this.projects.forEach((p, index) => {

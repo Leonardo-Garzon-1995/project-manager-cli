@@ -1,0 +1,55 @@
+[
+  {
+    "title": "my awesome project",
+    "description": "a cli app to manage awesome projects",
+    "createdAt": "2/6/2026",
+    "dueDate": null,
+    "highImportance": true,
+    "tags": [],
+    "tasks": [
+      {
+        "title": "my first task",
+        "createdAt": "2/6/2026, 11:11:08 AM",
+        "completed": true,
+        "dueDate": "2/7/2026"
+      },
+      {
+        "title": "my second task",
+        "createdAt": "2/10/2026, 5:23:57 AM",
+        "completed": false,
+        "dueDate": "2/13/2026"
+      },
+      {
+        "title": "my third task",
+        "createdAt": "2/10/2026, 5:30:11 AM",
+        "completed": false,
+        "dueDate": "2/11/2026"
+      }
+    ]
+  },
+  {
+    "title": "My second project",
+    "description": "cool project idea",
+    "createdAt": "2/6/2026",
+    "dueDate": null,
+    "highImportance": true,
+    "tags": [],
+    "tasks": [
+      {
+        "title": "random task",
+        "createdAt": "2/6/2026, 10:46:25 AM",
+        "completed": false,
+        "dueDate": "2/7/2026"
+      }
+    ]
+  },
+  {
+    "title": "My third project",
+    "description": "a software to manage the visitors in our house",
+    "createdAt": "2/6/2026",
+    "dueDate": null,
+    "highImportance": true,
+    "tags": [],
+    "tasks": []
+  }
+]

@@ -20,7 +20,7 @@ function main() {
         case "-ap":
             manager.addProject(FILE)
             break;
-        case "ls-projects":
+        case "list-projects":
         case "-lp":
             manager.listProjects()
             break;
@@ -28,7 +28,7 @@ function main() {
         case "-at":
             manager.addTaskToProjectByIndex(FILE, args[0])
             break;
-        case "ls-tasks":
+        case "list-tasks":
         case "-lt":
             manager.listTasksByProjectIndex(args[0])
             break;
