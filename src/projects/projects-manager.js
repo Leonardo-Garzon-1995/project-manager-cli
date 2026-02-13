@@ -89,6 +89,28 @@ export default class ProjectsManager {
         }
     }
 
+    clearTasksByProjectIndex(filePath, pIndex) {
+        if (!pIndex || Number.isNaN(parseInt(pIndex))) {
+            console.log('The project index must be a number')
+            process.exit(0)
+        }
+        if (!this.projects[pIndex -1]) {
+            console.log(`Project at index ${pIndex} does not exist.`)
+            process.exit(0)
+        }
+
+        try {
+            this.projects[pIndex - 1].clearAllTasks()
+            StorageService.save(filePath, this.projects)
+
+            console.log(`${colors.brightgreen}\u2713 Tasks for project ${pIndex} have been cleared successfully!${colors.reset}`)
+            process.exit(0)
+        } catch (error) {
+            console.log(error, error.message)
+        }
+        
+    }
+
     viewTaskByIndex(projectIndex, taskIndex) {
         this.projects[projectIndex - 1].viewTaskByIndex(taskIndex)
         process.exit(0)
@@ -132,7 +154,7 @@ export default class ProjectsManager {
             this.projects = []
             StorageService.save(filePath, this.projects)
 
-            console.log(`\n${colors.green}\u2713 AllProjects  have been cleared successfully!${colors.reset}`)
+            console.log(`\n${colors.green}\u2713 AllProjects have been cleared successfully!${colors.reset}`)
         } catch (error) {
             console.log(error, error.message )
         }
