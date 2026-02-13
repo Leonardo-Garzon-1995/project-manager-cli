@@ -32,6 +32,10 @@ function main() {
         case "-lt":
             manager.listTasksByProjectIndex(args[0])
             break;
+        case "clear-tasks":
+        case "-ct":
+            manager.clearTasksByProjectIndex(FILE, args[0])
+            break;
         case "view-project":
         case "-vp":
             manager.viewProjectByIndex(args[0])

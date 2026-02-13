@@ -82,6 +82,11 @@ export default class Project {
         this.tasks[index - 1].markAsCompleted()
     }
 
+    clearAllTasks() {
+        this.tasks = []
+        
+    }
+
     viewTaskByIndex(index) {
         const task = this.tasks[index - 1]
         console.log("")
