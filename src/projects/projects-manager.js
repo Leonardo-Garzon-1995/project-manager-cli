@@ -150,7 +150,7 @@ export default class ProjectsManager {
             StorageService.save(filePath, this.projects)
 
             console.log("")
-            console.log(`${colors.brightgreen}\u2713 Task ${tIndex} has been marked as completed successfully!${colors.reset}`)
+            console.log(`${colors.brightgreen}\u2713 Task ${tIndex} has been marked as completed!${colors.reset}`)
         } catch (error) {
             console.log(error)
         }

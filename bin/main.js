@@ -2,7 +2,8 @@
 
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { displayHelp, colors } from '../src/utils.js'
+import { displayHelp} from '../src/utils.js'
+import { displayDeafultHeader } from '../src/defaultUI.js'
 
 import ProjectsManager from '../src/projects/projects-manager.js'
 
@@ -14,8 +15,10 @@ const [, , command, ...args] = process.argv
 
 const manager = new ProjectsManager(FILE)
 
-function main() {
-    switch(command) {
+function main(cmd) {    
+    if (!cmd) return displayDeafultHeader()
+        
+    switch(cmd) {
         case "add-project":
         case "-ap":
             manager.addProject(FILE)
@@ -65,8 +68,9 @@ function main() {
             displayHelp()
             break;
         default:
+            displayHelp()
             break;
     }
 }
 
-main()
+main(command)
