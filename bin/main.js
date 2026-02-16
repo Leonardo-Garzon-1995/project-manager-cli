@@ -44,8 +44,8 @@ function main() {
         case "-lt":
             manager.listTasksByProjectIndex(args[0])
             break;
-        case "mark-task":
-        case "-mt":
+        case "task-completed":
+        case "-tc":
             manager.markTaskAsCompleted(FILE, args[0], args[1])
             break;
         case "clear-tasks":
@@ -60,9 +60,11 @@ function main() {
         case "-dt":
             manager.deleteTask(FILE, args[0], args[1])
             break;
-        default:
-            console.log(`${colors.red}Unknown command${colors.reset} <${command}>\n`)
+        case "help":
+        case "-h":
             displayHelp()
+            break;
+        default:
             break;
     }
 }
