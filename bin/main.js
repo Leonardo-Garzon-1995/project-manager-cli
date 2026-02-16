@@ -2,7 +2,7 @@
 
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { displayHelp } from '../src/utils.js'
+import { displayHelp, colors } from '../src/utils.js'
 
 import ProjectsManager from '../src/projects/projects-manager.js'
 
@@ -24,6 +24,18 @@ function main() {
         case "-lp":
             manager.listProjects()
             break;
+        case "delete-project":
+        case "-dp":
+            manager.deleteProjectByIndex(FILE, args[0])
+            break;
+        case "view-project":
+        case "-vp":
+            manager.viewProjectByIndex(args[0])
+            break;
+        case "clear-projects":
+        case "-cp":
+            manager.clearAllProjects(FILE)
+            break;
         case "add-task":
         case "-at":
             manager.addTaskToProjectByIndex(FILE, args[0])
@@ -36,10 +48,6 @@ function main() {
         case "-ct":
             manager.clearTasksByProjectIndex(FILE, args[0])
             break;
-        case "view-project":
-        case "-vp":
-            manager.viewProjectByIndex(args[0])
-            break;
         case "view-task":
         case "-vt":
             manager.viewTaskByIndex(args[0], args[1])
@@ -48,18 +56,9 @@ function main() {
         case "-dt":
             manager.deleteTask(FILE, args[0], args[1])
             break;
-        case "clear-projects":
-        case "-cp":
-            manager.clearAllProjects(FILE)
-            break;
-        case "delete-project":
-        case "-dp":
-            manager.deleteProjectByIndex(FILE, args[0])
-            break;
         default:
-            console.log("Not a valid argument")
+            console.log(`${colors.red}Unknown command${colors.reset} <${command}>\n`)
             displayHelp()
-            process.exit(0)
             break;
     }
 }
