@@ -119,6 +119,44 @@ export default class ProjectsManager {
         }
     }
 
+    markTaskAsCompleted(filePath, pIndex, tIndex) {
+        if (!pIndex || Number.isNaN(parseInt(pIndex))) {
+            console.log('   The project index must be a number')
+            return
+        }
+
+        if (!this.projects[pIndex -1]) {
+            console.log(`   Project at index ${pIndex} does not exist.`)
+            return
+        }
+
+        if (!tIndex || Number.isNaN(parseInt(tIndex))) {
+            console.log('   The task index must be a number')
+            return
+        }
+        
+        if (!this.projects[pIndex -1].tasks[tIndex -1]) {
+            console.log(`   Task at index ${tIndex} does not exist.`)
+            return
+        }
+
+        if (this.projects[pIndex -1].tasks[tIndex -1].completed) {
+            console.log(`   Task at index ${tIndex} is already completed.`)
+            return
+        }
+
+        try {
+            this.projects[pIndex - 1].setTaskAsCompletedByIndex(tIndex)
+            StorageService.save(filePath, this.projects)
+
+            console.log("")
+            console.log(`${colors.brightgreen}\u2713 Task ${tIndex} has been marked as completed successfully!${colors.reset}`)
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
+
     clearTasksByProjectIndex(filePath, pIndex) {
         if (!pIndex || Number.isNaN(parseInt(pIndex))) {
             console.log('   The project index must be a number')

@@ -44,6 +44,10 @@ function main() {
         case "-lt":
             manager.listTasksByProjectIndex(args[0])
             break;
+        case "mark-task":
+        case "-mt":
+            manager.markTaskAsCompleted(FILE, args[0], args[1])
+            break;
         case "clear-tasks":
         case "-ct":
             manager.clearTasksByProjectIndex(FILE, args[0])
