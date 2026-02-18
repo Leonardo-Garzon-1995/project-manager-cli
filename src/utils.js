@@ -36,6 +36,7 @@ function displayHelp() {
     console.log(`   ${colors.green}COMMANDS:${colors.reset}`);
     console.log(`       ${colors.cyan}add-project, -ap${colors.reset}`.padEnd(65, " ") + `Add a project`);
     console.log(`       ${colors.cyan}list-projects, -lp${colors.reset}`.padEnd(65, " ") + `List projects`);
+    console.log(`       ${colors.cyan}toggle-importance, -ti${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `Toggle importance of projects by index`);
     console.log(`       ${colors.cyan}add-task, -at${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `Add a task to a project by index`);
     console.log(`       ${colors.cyan}list-tasks, -lt${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `List tasks in a project by index`);    
     console.log(`       ${colors.cyan}view-project, -vp${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `View a project by index`);
@@ -43,6 +44,9 @@ function displayHelp() {
     console.log(`       ${colors.cyan}clear-projects${colors.reset}`.padEnd(65, " ") + `Clear all projects`);
     console.log(`       ${colors.cyan}delete-task, -dt${colors.gray} <project-index> <task-index>${colors.reset}`.padEnd(70, " ") + `Delete a task by index`);
     console.log(`       ${colors.cyan}delete-project, -dp${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `Delete a project by index`);
+    console.log(`       ${colors.cyan}task-completed, -tc${colors.gray} <project-index> <task-index>${colors.reset}`.padEnd(70, " ") + `Mark a task as completed by index`);
+    console.log('')
+    console.log(`       ${colors.cyan}help, -h${colors.reset}`.padEnd(65, " ") + `Display this help message`);
     console.log("")
 
 }

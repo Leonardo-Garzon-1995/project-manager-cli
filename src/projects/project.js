@@ -50,10 +50,6 @@ export default class Project {
         rl.close()
     }
 
-    markTaskAsCompletedByIndex(index) {
-        this.tasks[index - 1].markAsCompleted()
-    }
-
     listTasks() {
 
         if (this.tasks.length === 0) {
@@ -85,6 +81,10 @@ export default class Project {
     clearAllTasks() {
         this.tasks = []
         
+    }
+
+    toggleHighImportance() {
+        this.highImportance = !this.highImportance
     }
 
     viewTaskByIndex(index) {

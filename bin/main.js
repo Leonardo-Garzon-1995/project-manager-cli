@@ -2,7 +2,8 @@
 
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { displayHelp } from '../src/utils.js'
+import { displayHelp} from '../src/utils.js'
+import { displayDeafultHeader } from '../src/defaultUI.js'
 
 import ProjectsManager from '../src/projects/projects-manager.js'
 
@@ -14,8 +15,10 @@ const [, , command, ...args] = process.argv
 
 const manager = new ProjectsManager(FILE)
 
-function main() {
-    switch(command) {
+function main(cmd) {    
+    if (!cmd) return displayDeafultHeader()
+        
+    switch(cmd) {
         case "add-project":
         case "-ap":
             manager.addProject(FILE)
@@ -23,6 +26,22 @@ function main() {
         case "list-projects":
         case "-lp":
             manager.listProjects()
+            break;
+        case "delete-project":
+        case "-dp":
+            manager.deleteProjectByIndex(FILE, args[0])
+            break;
+        case "view-project":
+        case "-vp":
+            manager.viewProjectByIndex(args[0])
+            break;
+        case "toggle-importance":
+        case "-ti":
+            manager.toggleProjectImportance(FILE,args[0])
+            break;
+        case "clear-projects":
+        case "-cp":
+            manager.clearAllProjects(FILE)
             break;
         case "add-task":
         case "-at":
@@ -32,13 +51,13 @@ function main() {
         case "-lt":
             manager.listTasksByProjectIndex(args[0])
             break;
+        case "task-completed":
+        case "-tc":
+            manager.markTaskAsCompleted(FILE, args[0], args[1])
+            break;
         case "clear-tasks":
         case "-ct":
             manager.clearTasksByProjectIndex(FILE, args[0])
-            break;
-        case "view-project":
-        case "-vp":
-            manager.viewProjectByIndex(args[0])
             break;
         case "view-task":
         case "-vt":
@@ -48,20 +67,14 @@ function main() {
         case "-dt":
             manager.deleteTask(FILE, args[0], args[1])
             break;
-        case "clear-projects":
-        case "-cp":
-            manager.clearAllProjects(FILE)
-            break;
-        case "delete-project":
-        case "-dp":
-            manager.deleteProjectByIndex(FILE, args[0])
+        case "help":
+        case "-h":
+            displayHelp()
             break;
         default:
-            console.log("Not a valid argument")
             displayHelp()
-            process.exit(0)
             break;
     }
 }
 
-main()
+main(command)
