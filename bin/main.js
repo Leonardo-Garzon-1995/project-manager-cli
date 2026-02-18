@@ -35,6 +35,10 @@ function main(cmd) {
         case "-vp":
             manager.viewProjectByIndex(args[0])
             break;
+        case "toggle-importance":
+        case "-ti":
+            manager.toggleProjectImportance(FILE,args[0])
+            break;
         case "clear-projects":
         case "-cp":
             manager.clearAllProjects(FILE)

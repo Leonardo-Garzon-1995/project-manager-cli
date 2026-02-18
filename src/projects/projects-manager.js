@@ -54,6 +54,25 @@ export default class ProjectsManager {
             console.log(error, error.message )
         }
     }
+    
+    toggleProjectImportance(filePath, pIndex) {
+        if (!pIndex || Number.isNaN(parseInt(pIndex))) {
+            console.log('   The project index must be a number')
+            return
+        }
+        if (!this.projects[pIndex -1]) {
+            console.log(`   Project at index ${pIndex} does not exist.`)
+            return
+        }
+        this.projects[pIndex -1].toggleHighImportance()
+        StorageService.save(filePath, this.projects)
+        
+        if (this.projects[pIndex -1].highImportance) {
+            console.log(`\n${colors.green}\u2713 Project at index ${pIndex} has been marked as high importance.${colors.reset}`)
+        } else {
+            console.log(`\n${colors.green}\u2713 Project at index ${pIndex} has been marked as low importance.${colors.reset}`)
+        }
+    }
 
     // Tasks related methods
     listTasksByProjectIndex(index) {

@@ -56,11 +56,11 @@ function displayDeafultHeader() {
         console.log("Good Morning!\n")
     } else if (afterNoon) {
         console.log(`${colors.brightyellow}`)
-        console.log(pro)
+        console.log(proTwo)
         console.log(`${colors.reset}`)
         console.log("Good Afternoon!\n")
     } else if (evening){
-        console.log(`${colors.yellow}`)
+        console.log(`${colors.cyan}`)
         console.log(proThree)
         console.log(`${colors.reset}`)
         console.log("Good Evening!\n")

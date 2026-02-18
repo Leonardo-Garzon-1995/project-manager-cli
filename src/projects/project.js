@@ -83,6 +83,10 @@ export default class Project {
         
     }
 
+    toggleHighImportance() {
+        this.highImportance = !this.highImportance
+    }
+
     viewTaskByIndex(index) {
         const task = this.tasks[index - 1]
         console.log("")
