@@ -1,6 +1,6 @@
 import Project from './project.js'
 import StorageService from '../storage-service.js'
-import {colors, displayBanner} from '../utils.js'
+import {colors, displayBanner, filterTasksByDate, displayBannerThin} from '../utils.js'
 
 import readline from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
@@ -14,21 +14,32 @@ export default class ProjectsManager {
     async addProject(filePath) {
         const rl = readline.createInterface({ input, output, terminal: false })
         try {
-            let title = await rl.question("Enter project title: ")
+            let title = await rl.question(`   ${colors.cyan}♦ Enter project title: ${colors.reset}`)
+            console.log("   │")
             while (!title || typeof title !== 'string') {
-                console.log("A tile is required and must be a string")
-                title = rl.question("Enter project title: ")
+                console.log("   A tile is required and must be a string")
+                title = await rl.question(`   ${colors.cyan}♦ Enter project title: ${colors.reset}`)
+                console.log("   │")
             }
-            let description = await rl.question("Enter project description: ")
+            let description = await rl.question(`   ${colors.cyan}♦ Enter project description: ${colors.reset}`)
+            console.log("   │")
             while (!description || typeof description !== 'string') {
-                console.log("A description is required and must be a string")
-                description = await rl.question("Enter project description: ")
+                console.log("   A description is required and must be a string")
+                description = await rl.question(`   ${colors.cyan}♦ Enter project title: ${colors.reset}`)
+                console.log("   │")
             }
-            const project = new Project(title, description)
+            let keyword = await rl.question(`   ${colors.cyan}♦ Give the project a keyword: ${colors.reset}`)
+            console.log("   │")
+            while (!keyword || typeof keyword !== 'string') {
+                console.log("   A keyword is required and must be a string")
+                keyword = await rl.question(`   ${colors.cyan}♦ Give the project a keyword: ${colors.reset}`)
+                console.log("   │")
+            }
+            const project = new Project(title, description, keyword)
             this.projects.push(project)
 
             StorageService.save(filePath, this.projects)
-            console.log(`\n${colors.green}\u2713 Project added successfully!${colors.reset}`)
+            console.log(`   ${colors.green}\u2713 Project added successfully!${colors.reset}`)
 
         } catch (error) {
             console.log(error, error.message )
@@ -48,7 +59,7 @@ export default class ProjectsManager {
         try {
             await this.projects[projectIndex - 1].addTask()
             StorageService.save(filePath, this.projects)
-            console.log(`\n${colors.green}\u2713 Task added successfully!${colors.reset}`)
+            console.log(`   ${colors.green}\u2713 Task added successfully!${colors.reset}`)
 
         } catch (error) {
             console.log(error, error.message )
@@ -313,6 +324,23 @@ export default class ProjectsManager {
         } catch (error) {
             console.log(error, error.message )
         }
+        
+    }
+
+    displayDailyTasks() {
+        const todayTasks = filterTasksByDate(this.projects)
+        const date = new Date().toLocaleDateString()
+
+        displayBannerThin(date, "YOUR TASKS FOR TODAY:")
+        todayTasks.forEach((t, index) => {
+            let taskStatus = ""
+            if (t.completed) {
+                taskStatus = `${colors.brightgreen}\u2713${colors.reset}`
+            } else {
+                taskStatus =  `${colors.brightred}\u2717${colors.reset}`
+            }
+            console.log(`[${colors.cyan}${index + 1}${colors.reset}] - ${t.title} (${taskStatus})`)
+        })
         
     }
 }

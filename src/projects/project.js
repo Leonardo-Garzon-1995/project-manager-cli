@@ -6,8 +6,10 @@ import { stdin as input, stdout as output } from 'node:process'
 
 
 export default class Project {
-    constructor(title, description) {
+    constructor(title, description, keyword) {
+        this.id = `pro-${crypto.randomUUID()}`
         this.title = title
+        this.keyword = keyword || title.slice(0, 5).toLowerCase()
         this.description = description
         this.createdAt = new Date().toLocaleDateString()
         this.dueDate = null
@@ -29,22 +31,27 @@ export default class Project {
     async addTask() {
         const rl = readline.createInterface({ input, output, terminal: false })
 
-        let title = await rl.question("Enter task title: ")
+        let title = await rl.question(`   ${colors.brightyellow}♦ Enter task title: ${colors.reset}`)
+        console.log("   │")
         while (!title || typeof title !== 'string') {
-            console.log("A tile is required and must be a string")
-            title = await rl.question("Enter task title: ")
+            console.log("   A tile is required and must be a string")
+            title = await rl.question(`   ${colors.brightyellow}♦ Enter task title: ${colors.reset}`)
+            console.log("   │")
         }
-        let dueDate = await rl.question("Enter due date (YYYY-MM-DD): ")
+        let dueDate = await rl.question(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
+        console.log("   │")
         if (dueDate === "next") {
             dueDate = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString()
         }
         while (!dueDate || typeof dueDate !== 'string') {
-            console.log("A due date is required and must be a string")
-            dueDate = await rl.question("Enter due date (YYYY-MM-DD): ")
+            console.log("   A due date is required and must be a string")
+            dueDate = await rl.question(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
+            console.log("   │")
         }
 
         const newTask = new Task(title)
         newTask.dueDate = new Date(dueDate).toLocaleDateString()
+        newTask.proId = this.id
         this.tasks.push(newTask)
 
         rl.close()
@@ -66,6 +73,7 @@ export default class Project {
             }
             console.log(`[${colors.cyan}${index + 1}${colors.reset}] - ${t.title} (${taskStatus})`)
         })
+
     }
 
     deleteTaskByIndex(i) {

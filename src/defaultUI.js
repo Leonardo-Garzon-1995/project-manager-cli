@@ -53,22 +53,22 @@ function displayDeafultHeader() {
         console.log(`${colors.cyan}`)
         console.log(proTwo)
         console.log(`${colors.reset}`)
-        console.log("Good Morning!\n")
+        console.log("Good Morning!")
     } else if (afterNoon) {
         console.log(`${colors.brightyellow}`)
         console.log(proTwo)
         console.log(`${colors.reset}`)
-        console.log("Good Afternoon!\n")
+        console.log("Good Afternoon!")
     } else if (evening){
         console.log(`${colors.cyan}`)
         console.log(proThree)
         console.log(`${colors.reset}`)
-        console.log("Good Evening!\n")
+        console.log("Good Evening!")
     } else if (night) {
         console.log(`${colors.blue}`)
         console.log(proThree)
         console.log(`${colors.reset}`)
-        console.log("Good Night!\n")
+        console.log("Good Night!")
     }
 }
 

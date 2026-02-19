@@ -18,12 +18,16 @@ export default class StorageService {
         const data = JSON.parse(raw)
         return data.map(p => {
             const project = new Project(p.title, p.description)
+            project.id = p.id
+            project.keyword = p.keyword
             project.createdAt = p.createdAt
             project.dueDate = p.dueDate
             project.highImportance = p.highImportance
             project.tags = p.tags
             p.tasks.map(t => {
                 const task = new Task(t.title)
+                task.id = t.id
+                task.proId = t.proId
                 task.createdAt = t.createdAt
                 task.dueDate = t.dueDate
                 task.completed = t.completed
