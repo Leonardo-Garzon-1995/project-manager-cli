@@ -16,7 +16,13 @@ const [, , command, ...args] = process.argv
 const manager = new ProjectsManager(FILE)
 
 function main(cmd) {    
-    if (!cmd) return displayDeafultHeader()
+    if (!cmd) {
+        displayDeafultHeader()
+        manager.displayDailyTasks()
+        console.log("")
+        console.log("=".repeat(42) + '\n')
+        return
+    }
         
     switch(cmd) {
         case "add-project":
@@ -72,6 +78,7 @@ function main(cmd) {
             displayHelp()
             break;
         default:
+            console.log(`   Invalid command: <${cmd}>\n`)
             displayHelp()
             break;
     }

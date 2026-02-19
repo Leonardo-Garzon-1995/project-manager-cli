@@ -4,7 +4,9 @@ import { stdin as input, stdout as output } from 'node:process'
 const rl = readline.createInterface({ input, output, terminal: false })
 export default class Task {
     constructor(title) {
+        this.id = `tsk-${crypto.randomUUID()}`
         this.title = title.trim()
+        this.proId = null
         this.createdAt = new Date().toLocaleString()
         this.completed = false
         this.dueDate = null

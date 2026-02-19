@@ -20,14 +20,23 @@ const colors = {
 
 
 // Formatting
-function displayBanner(title, text) {
-    console.log(colors.cyan)
+function displayBanner(title, text, color = colors.cyan) {
+    console.log(color)
     console.log("╔" + "═".repeat(40) + "╗");
-    console.log("║ " + colors.reset + title.padEnd(39) + colors.cyan + "║");
-    console.log("║ " + colors.reset + text.padEnd(39) + colors.cyan + "║");
+    console.log("║ " + colors.reset + title.padEnd(39) + color + "║");
+    console.log("║ " + colors.reset + text.padEnd(39) + color + "║");
     console.log("╚" + "═".repeat(40) + "╝" + colors.reset);
     console.log("")
 
+}
+
+function displayBannerThin(text, secondText, color = colors.cyan) {
+    console.log(color)
+    console.log("╭" + "─".repeat(40) + "╮");
+    console.log("│ " + colors.reset + text.padEnd(39) + color + "│");
+    console.log("│ " + colors.reset + secondText.padEnd(39) + color + "│");
+    console.log("╰" + "─".repeat(40) + "┘" + colors.reset);
+    console.log("")
 }
 // Help messages
 function displayHelp() {
@@ -51,8 +60,28 @@ function displayHelp() {
 
 }
 
+// Other utilities
+function filterTasksByDate(input) {
+    const projectsWithTasks = input.filter(p => p.tasks.length > 0)
+    const dailyTasks = []
+
+    for (let i = 0; i < projectsWithTasks.length; i++) {
+        if (projectsWithTasks[i].tasks.length > 0) {
+            for (let j = 0; j < projectsWithTasks[i].tasks.length; j++) {
+                if (projectsWithTasks[i].tasks[j].dueDate === new Date().toLocaleDateString()) {
+                    dailyTasks.push(projectsWithTasks[i].tasks[j])
+                }
+            }
+        }
+    }
+
+    return dailyTasks
+}
+
 export {
     colors,
     displayHelp,
-    displayBanner
+    displayBanner,
+    displayBannerThin,
+    filterTasksByDate
 }
