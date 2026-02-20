@@ -54,6 +54,7 @@ function displayHelp() {
     console.log(`       ${colors.cyan}delete-task, -dt${colors.gray} <project-index> <task-index>${colors.reset}`.padEnd(70, " ") + `Delete a task by index`);
     console.log(`       ${colors.cyan}delete-project, -dp${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `Delete a project by index`);
     console.log(`       ${colors.cyan}task-completed, -tc${colors.gray} <project-index> <task-index>${colors.reset}`.padEnd(70, " ") + `Mark a task as completed by index`);
+    console.log(`       ${colors.cyan}clear-tasks${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `Clear all tasks by project index`);
     console.log('')
     console.log(`       ${colors.cyan}help, -h${colors.reset}`.padEnd(65, " ") + `Display this help message`);
     console.log("")
