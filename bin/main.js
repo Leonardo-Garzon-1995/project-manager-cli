@@ -46,7 +46,6 @@ function main(cmd) {
             manager.toggleProjectImportance(FILE,args[0])
             break;
         case "clear-projects":
-        case "-cp":
             manager.clearAllProjects(FILE)
             break;
         case "add-task":
@@ -62,7 +61,6 @@ function main(cmd) {
             manager.markTaskAsCompleted(FILE, args[0], args[1])
             break;
         case "clear-tasks":
-        case "-ct":
             manager.clearTasksByProjectIndex(FILE, args[0])
             break;
         case "view-task":
