@@ -8,9 +8,9 @@ import { stdin as input, stdout as output } from 'node:process'
 export default class Project {
     constructor(title, description, keyword) {
         this.id = `pro-${crypto.randomUUID()}`
-        this.title = title
+        this.title = title.trim()
         this.keyword = keyword || title.slice(0, 5).toLowerCase()
-        this.description = description
+        this.description = description.trim()
         this.createdAt = new Date().toLocaleDateString()
         this.dueDate = null
         this.highImportance = false
@@ -40,8 +40,14 @@ export default class Project {
         }
         let dueDate = await rl.question(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
         console.log("   │")
-        if (dueDate === "next") {
+        if (dueDate === "today") {
+            dueDate = new Date().toLocaleDateString()
+        }
+        if (dueDate === "tomorrow") {
             dueDate = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString()
+        }
+        if (dueDate === "month") {
+            dueDate = new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString()
         }
         while (!dueDate || typeof dueDate !== 'string') {
             console.log("   A due date is required and must be a string")
@@ -98,13 +104,10 @@ export default class Project {
     viewTaskByIndex(index) {
         const task = this.tasks[index - 1]
         console.log("")
-        console.log(`________TASK________`.padStart(28, " "))
-        console.log(`
-        Title: ${colors.cyan}${task.title}${colors.reset}
-        Posted: ${colors.cyan}${new Date(task.createdAt).toLocaleDateString()}${colors.reset}
-        Due Date: ${colors.cyan}${task.dueDate || "No due date"}${colors.reset}
-        Completed: ${task.completed ? `${colors.brightgreen}\u2713${colors.reset}` : `${colors.brightred}\u2717${colors.reset}`}
-            `)
+        console.log(`________TASK________`)
+        console.log(`${colors.cyan}♢ ${task.title}${colors.reset}\n`)
+        console.log(`${colors.cyan}⚐ Due Date:${colors.reset} ${task.dueDate}`)
+        console.log(`${colors.cyan}⚐ Completed:${colors.reset} ${task.completed ? `${colors.brightgreen}\u2713${colors.reset}` : `${colors.brightred}\u2717${colors.reset}`}\n`)
     }
 
 }

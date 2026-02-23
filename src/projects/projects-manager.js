@@ -25,14 +25,14 @@ export default class ProjectsManager {
             console.log("   │")
             while (!description || typeof description !== 'string') {
                 console.log("   A description is required and must be a string")
-                description = await rl.question(`   ${colors.cyan}♦ Enter project title: ${colors.reset}`)
+                description = await rl.question(`   ${colors.cyan}♦ Enter project description: ${colors.reset}`)
                 console.log("   │")
             }
-            let keyword = await rl.question(`   ${colors.cyan}♦ Give the project a keyword: ${colors.reset}`)
+            let keyword = (await rl.question(`   ${colors.cyan}♦ Give the project a keyword: ${colors.reset}`)).trim()
             console.log("   │")
             while (!keyword || typeof keyword !== 'string') {
                 console.log("   A keyword is required and must be a string")
-                keyword = await rl.question(`   ${colors.cyan}♦ Give the project a keyword: ${colors.reset}`)
+                keyword = (await rl.question(`   ${colors.cyan}♦ Give the project a keyword: ${colors.reset}`)).trim()
                 console.log("   │")
             }
             const project = new Project(title, description, keyword)
@@ -308,18 +308,18 @@ export default class ProjectsManager {
 
         try {
             const project = this.projects[index - 1]
-
-            const description = project.description.length > 25 ? `${project.description.slice(0, 30)}...` : project.description
+            const importance = project.highImportance ? `${colors.brightgreen}High${colors.reset}` : `Low`
             console.log("")
-            console.log(`_______PROJECT_______`.padStart(29, " "))
-            console.log(`
-            Title: ${colors.cyan}${project.title}${colors.reset}
-            Description: ${colors.cyan}${description}${colors.reset}
-            Tasks: ${project.tasks.length}
-            Posted: ${colors.cyan}${project.createdAt}${colors.reset}
-            Due Date: ${colors.cyan}${project.dueDate || "No due date"}${colors.reset}
-            importance: ${project.highImportance ? `${colors.brightgreen}\u2191${colors.reset}` : `${colors.brightred}\u2193${colors.reset}`}
-            `)
+            console.log(`_______PROJECT_______`)
+            console.log(`${colors.cyan}♢ ${project.title}${colors.reset}\n`)
+            
+            console.log(`${colors.cyan}⚐ Keyword:${colors.reset} ${project.keyword}`)
+            console.log(`${colors.cyan}⚐ Tasks:${colors.reset} ${project.tasks.length}`)
+            console.log(`${colors.cyan}⚐ Posted:${colors.reset} ${project.createdAt}`)
+            console.log(`${colors.cyan}⚐ Due Date:${colors.reset} ${project.dueDate || "No due date"}`)
+            console.log(`${colors.cyan}⚐ Importance:${colors.reset} ${importance}`)
+            if (project.tags.length > 0) { console.log(`${colors.cyan}⚐ Tags:${colors.reset} ${project.tags.join(", ")}`)}
+            console.log(`${colors.cyan}⚐ Description:${colors.reset} ${project.description}\n`)
 
         } catch (error) {
             console.log(error, error.message )
