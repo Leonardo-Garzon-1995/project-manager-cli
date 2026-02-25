@@ -46,6 +46,9 @@ export default class Project {
         if (dueDate === "tomorrow") {
             dueDate = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString()
         }
+        if (dueDate === "week") {
+            dueDate = new Date(new Date().setDate(new Date().getDate() + 7)).toLocaleDateString()
+        }
         if (dueDate === "month") {
             dueDate = new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString()
         }
