@@ -85,6 +85,11 @@ export default class Project {
 
     }
 
+    filterTasksByCompleted() {
+        const completedTasks = this.tasks.filter(t => t.completed)
+        return completedTasks.forEach((t, index) => console.log(`[${colors.cyan}${index + 1}${colors.reset}] - ${t.title} (${colors.brightgreen}\u2713${colors.reset})`))
+    }
+
     deleteTaskByIndex(i) {
         const filtered = this.tasks.filter((_, index) => index !== i - 1)
         this.tasks = filtered

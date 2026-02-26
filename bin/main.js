@@ -56,6 +56,10 @@ function main(cmd) {
         case "-lt":
             manager.listTasksByProjectIndex(args[0])
             break;
+        case "list-completed-tasks":
+        case "-lct":
+            manager.listCompletedTasksByIndex(args[0])
+            break;
         case "task-completed":
         case "-tc":
             manager.markTaskAsCompleted(FILE, args[0], args[1])
