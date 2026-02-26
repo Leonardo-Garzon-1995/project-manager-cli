@@ -104,6 +104,24 @@ export default class ProjectsManager {
         }
     }
 
+    listPendingTasksByIndex(pIndex) {
+        if (!pIndex || Number.isNaN(parseInt(pIndex))) {
+            console.log('   The project index must be a number')
+            return
+        }
+        if (!this.projects[pIndex -1]) {
+            console.log(`   Project at index ${pIndex} does not exist.`)
+            return
+        }
+        try {
+            displayBanner("PENDING TASKS FOR:", `${pIndex} - ${this.projects[pIndex - 1].title}`, colors.yellow)
+            this.projects[pIndex -1].filterTasksByPending()
+            console.log("=".repeat(42) + '\n')
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     // Tasks related methods
     listTasksByProjectIndex(index) {
         if (!index || Number.isNaN(parseInt(index))) {
