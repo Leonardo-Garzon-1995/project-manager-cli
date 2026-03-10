@@ -97,8 +97,8 @@ export default class Project {
         return pendingTasks.forEach((t, index) => console.log(`[${colors.cyan}${index + 1}${colors.reset}] - ${t.title} (${colors.brightred}\u2717${colors.reset})`))
     }
 
-    deleteTaskByIndex(i) {
-        const filtered = this.tasks.filter((_, index) => index !== i - 1)
+    deleteTaskByIndex(...indexes) {
+        const filtered = this.tasks.filter((_, index) => !indexes.includes(index))
         this.tasks = filtered
         return this.tasks
     }

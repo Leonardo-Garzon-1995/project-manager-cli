@@ -175,7 +175,7 @@ export default class ProjectsManager {
             return
         }
         try {
-            const updatedtasks = this.projects[pIndex - 1].deleteTaskByIndex(tIndex)
+            const updatedtasks = this.projects[pIndex - 1].deleteTaskByIndex(tIndex - 1)
             this.projects[pIndex -1].tasks = updatedtasks
             
             StorageService.save(filePath, this.projects)
