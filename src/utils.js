@@ -1,4 +1,4 @@
-
+// FORMATTING
 const colors = {
     red: "\x1b[31m",
     green: "\x1b[32m",
@@ -18,8 +18,6 @@ const colors = {
     reset: "\x1b[0m",
 };
 
-
-// Formatting
 function displayBanner(title, text, color = colors.cyan) {
     console.log(color)
     console.log("╔" + "═".repeat(40) + "╗");
@@ -38,7 +36,8 @@ function displayBannerThin(text, secondText, color = colors.cyan) {
     console.log("╰" + "─".repeat(40) + "┘" + colors.reset);
     console.log("")
 }
-// Help messages
+
+// HELP DISPLAY
 function displayHelp() {
     console.log(`   ${colors.green}USAGE:${colors.reset}`)
     console.log(`       ${colors.brightyellow}pro${colors.reset} <command> [options]\n`);
@@ -56,6 +55,8 @@ function displayHelp() {
     console.log(`       ${colors.cyan}list-tasks, -lt${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `List tasks in a project by index`);    
     console.log(`       ${colors.cyan}view-task, -vt${colors.gray} <project-index> <task-index>${colors.reset}`.padEnd(70, " ") + `View a task by index`);
     console.log(`       ${colors.cyan}task-completed, -tc${colors.gray} <project-index> <task-index>${colors.reset}`.padEnd(70, " ") + `Mark a task as completed by index`);
+    console.log(`       ${colors.cyan}list-completed-tasks, -lct${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `List completed tasks by project index`);
+    console.log(`       ${colors.cyan}list-pending-tasks, -lpt${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `List pending tasks by project index`);
     console.log(`       ${colors.cyan}delete-task, -dt${colors.gray} <project-index> <task-index>${colors.reset}`.padEnd(70, " ") + `Delete a task by index`);
     console.log(`       ${colors.cyan}clear-tasks${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `Clear all tasks by project index`);
     console.log('')
@@ -63,7 +64,7 @@ function displayHelp() {
     console.log("")
 }
 
-// Other utilities
+// OTHER UTILITIES
 function filterTasksByDate(input) {
     const projectsWithTasks = input.filter(p => p.tasks.length > 0)
     const dailyTasks = []
