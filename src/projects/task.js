@@ -7,6 +7,7 @@ export default class Task {
         this.id = `tsk-${crypto.randomUUID()}`
         this.title = title.trim()
         this.proId = null
+        this.proKeyword = null
         this.createdAt = new Date().toLocaleString()
         this.completed = false
         this.dueDate = null

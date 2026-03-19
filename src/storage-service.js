@@ -28,6 +28,7 @@ export default class StorageService {
                 const task = new Task(t.title)
                 task.id = t.id
                 task.proId = t.proId
+                task.proKeyword = t.proKeyword
                 task.createdAt = t.createdAt
                 task.dueDate = t.dueDate
                 task.completed = t.completed
