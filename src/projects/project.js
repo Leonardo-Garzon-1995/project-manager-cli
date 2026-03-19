@@ -31,6 +31,8 @@ export default class Project {
     async addTask() {
         const rl = readline.createInterface({ input, output, terminal: false })
 
+        console.log(`   ${colors.brightyellow}♦ ${colors.cyan}Adding task to: ${this.title}${colors.reset}`)
+        console.log("   │")
         let title = await rl.question(`   ${colors.brightyellow}♦ Enter task title: ${colors.reset}`)
         console.log("   │")
         while (!title || typeof title !== 'string') {
@@ -61,6 +63,7 @@ export default class Project {
         const newTask = new Task(title)
         newTask.dueDate = new Date(dueDate).toLocaleDateString()
         newTask.proId = this.id
+        newTask.proKeyword = this.keyword
         this.tasks.push(newTask)
 
         rl.close()

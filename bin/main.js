@@ -19,8 +19,6 @@ function main(cmd) {
     if (!cmd) {
         displayDeafultHeader()
         manager.displayDailyTasks()
-        console.log("")
-        console.log("=".repeat(42) + '\n')
         return
     }
         

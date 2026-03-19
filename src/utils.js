@@ -37,6 +37,30 @@ function displayBannerThin(text, secondText, color = colors.cyan) {
     console.log("")
 }
 
+/** 
+ * 
+ * @param {number} value - value for the filled portion of the bar 
+ * @param {number} max - max value accepted 
+ * @param {number} width - width of the bar 
+ * @param {object} options
+ *  */ 
+function buildMiniBar(value, max, width=16, options={}) {
+    const {
+        fillColor='\x1b[32m',
+        emptyColor='\x1b[0m',
+        fillChar='\u25AA',
+        emptyChar='\u25AB'
+    } = options
+
+    if (value === 0) {
+        return emptyColor + emptyChar.repeat(width)
+    }
+    const filled = Math.round((value / max) * width)
+    const empty = width - filled
+
+    return `${fillColor}${fillChar}`.repeat(Math.max(filled, 1)) + `${emptyColor}${emptyChar}`.repeat(Math.max(empty, 0))
+}
+
 // HELP DISPLAY
 function displayHelp() {
     console.log(`   ${colors.green}USAGE:${colors.reset}`)
@@ -87,5 +111,6 @@ export {
     displayHelp,
     displayBanner,
     displayBannerThin,
-    filterTasksByDate
+    filterTasksByDate,
+    buildMiniBar
 }

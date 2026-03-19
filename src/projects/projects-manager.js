@@ -1,6 +1,6 @@
 import Project from './project.js'
 import StorageService from '../storage-service.js'
-import {colors, displayBanner, filterTasksByDate, displayBannerThin} from '../utils.js'
+import {colors, displayBanner, filterTasksByDate, displayBannerThin, buildMiniBar} from '../utils.js'
 
 import readline from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
@@ -346,15 +346,17 @@ export default class ProjectsManager {
         try {
             const project = this.projects[index - 1]
             const importance = project.highImportance ? `${colors.brightgreen}High${colors.reset}` : `Low`
+            const doneTasks = project.tasks.filter(t => t.completed).length
+            const totalTasks = project.tasks.length
             console.log("")
             console.log(`_______PROJECT_______`)
             console.log(`${colors.cyan}♢ ${project.title}${colors.reset}\n`)
             
             console.log(`${colors.cyan}⚐ Keyword:${colors.reset} ${project.keyword}`)
-            console.log(`${colors.cyan}⚐ Tasks:${colors.reset} ${project.tasks.length}`)
             console.log(`${colors.cyan}⚐ Posted:${colors.reset} ${project.createdAt}`)
             console.log(`${colors.cyan}⚐ Due Date:${colors.reset} ${project.dueDate || "No due date"}`)
             console.log(`${colors.cyan}⚐ Importance:${colors.reset} ${importance}`)
+            console.log(`${colors.cyan}⚐ Tasks: ${buildMiniBar(doneTasks, totalTasks, totalTasks)} ${colors.green}${doneTasks}${colors.reset}/${totalTasks}`)
             if (project.tags.length > 0) { console.log(`${colors.cyan}⚐ Tags:${colors.reset} ${project.tags.join(", ")}`)}
             console.log(`${colors.cyan}⚐ Description:${colors.reset} ${project.description}\n`)
 
@@ -366,18 +368,23 @@ export default class ProjectsManager {
 
     displayDailyTasks() {
         const todayTasks = filterTasksByDate(this.projects)
-        const date = new Date().toLocaleDateString()
+        const currentDate = new Date().toLocaleDateString()
 
-        displayBannerThin(date, "YOUR TASKS FOR TODAY:")
-        todayTasks.forEach((t, index) => {
+        displayBannerThin(currentDate, "YOUR TASKS FOR TODAY:")
+        console.log(`PRO-REF`.padEnd(10) + `STATUS`.padEnd(8) + `TASK`)
+        console.log("=".repeat(50))
+        todayTasks.forEach((t) => {
+            const keyword = t.proKeyword ? t.proKeyword : "-------"
             let taskStatus = ""
             if (t.completed) {
                 taskStatus = `${colors.brightgreen}\u2713${colors.reset}`
             } else {
                 taskStatus =  `${colors.brightred}\u2717${colors.reset}`
             }
-            console.log(`[${colors.cyan}${index + 1}${colors.reset}] - ${t.title} (${taskStatus})`)
+            console.log(`${colors.cyan}${keyword}${colors.reset}`.padEnd(22) + taskStatus.padEnd(14) + `- ${t.title}`)
         })
+        console.log("")
+        console.log("=".repeat(50))
         
     }
 }
