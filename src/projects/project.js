@@ -9,7 +9,7 @@ export default class Project {
     constructor(title, description, keyword) {
         this.id = `pro-${crypto.randomUUID()}`
         this.title = title.trim()
-        this.keyword = keyword || title.slice(0, 5).toLowerCase()
+        this.keyword = keyword? keyword.toUpperCase().trim() : title.slice(0, 5).toUpperCase().trim()
         this.description = description.trim()
         this.createdAt = new Date().toLocaleDateString()
         this.dueDate = null
@@ -121,10 +121,11 @@ export default class Project {
 
     viewTaskByIndex(index) {
         const task = this.tasks[index - 1]
+        const dueDate = new Date(task.dueDate).toLocaleDateString()
         console.log("")
         console.log(`________TASK________`)
         console.log(`${colors.cyan}♢ ${task.title}${colors.reset}\n`)
-        console.log(`${colors.cyan}⚐ Due Date:${colors.reset} ${task.dueDate}`)
+        console.log(`${colors.cyan}⚐ Due Date:${colors.reset} ${dueDate}`)
         console.log(`${colors.cyan}⚐ Completed:${colors.reset} ${task.completed ? `${colors.brightgreen}\u2713${colors.reset}` : `${colors.brightred}\u2717${colors.reset}`}\n`)
     }
 

@@ -1,6 +1,6 @@
 import Project from './project.js'
 import StorageService from '../storage-service.js'
-import {colors, displayBanner, filterTasksByDate, displayBannerThin, buildMiniBar} from '../utils.js'
+import {colors, displayBanner, filterTasksByDate, displayBannerThin, buildMiniBar, divider} from '../utils.js'
 
 import readline from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
@@ -30,11 +30,7 @@ export default class ProjectsManager {
             }
             let keyword = (await rl.question(`   ${colors.cyan}♦ Give the project a keyword: ${colors.reset}`)).trim()
             console.log("   │")
-            while (!keyword || typeof keyword !== 'string') {
-                console.log("   A keyword is required and must be a string")
-                keyword = (await rl.question(`   ${colors.cyan}♦ Give the project a keyword: ${colors.reset}`)).trim()
-                console.log("   │")
-            }
+            if (keyword.length > 7) keyword = keyword.substring(0, 7)
             const project = new Project(title, description, keyword)
             this.projects.push(project)
 
@@ -348,13 +344,16 @@ export default class ProjectsManager {
             const importance = project.highImportance ? `${colors.brightgreen}High${colors.reset}` : `Low`
             const doneTasks = project.tasks.filter(t => t.completed).length
             const totalTasks = project.tasks.length
+            const dueDate = project.dueDate ? new Date(project.dueDate).toLocaleDateString() : "No due date"
+            const cratedAt = new Date(project.createdAt).toLocaleDateString()
+
             console.log("")
             console.log(`_______PROJECT_______`)
             console.log(`${colors.cyan}♢ ${project.title}${colors.reset}\n`)
             
             console.log(`${colors.cyan}⚐ Keyword:${colors.reset} ${project.keyword}`)
-            console.log(`${colors.cyan}⚐ Posted:${colors.reset} ${project.createdAt}`)
-            console.log(`${colors.cyan}⚐ Due Date:${colors.reset} ${project.dueDate || "No due date"}`)
+            console.log(`${colors.cyan}⚐ Posted:${colors.reset} ${cratedAt}`)
+            console.log(`${colors.cyan}⚐ Due Date:${colors.reset} ${dueDate}`)
             console.log(`${colors.cyan}⚐ Importance:${colors.reset} ${importance}`)
             console.log(`${colors.cyan}⚐ Tasks: ${buildMiniBar(doneTasks, totalTasks, totalTasks)} ${colors.green}${doneTasks}${colors.reset}/${totalTasks}`)
             if (project.tags.length > 0) { console.log(`${colors.cyan}⚐ Tags:${colors.reset} ${project.tags.join(", ")}`)}
@@ -372,7 +371,7 @@ export default class ProjectsManager {
 
         displayBannerThin(currentDate, "YOUR TASKS FOR TODAY:")
         console.log(`PRO-REF`.padEnd(10) + `STATUS`.padEnd(8) + `TASK`)
-        console.log("=".repeat(50))
+        divider(50)
         todayTasks.forEach((t) => {
             const keyword = t.proKeyword ? t.proKeyword : "-------"
             let taskStatus = ""
@@ -381,10 +380,11 @@ export default class ProjectsManager {
             } else {
                 taskStatus =  `${colors.brightred}\u2717${colors.reset}`
             }
-            console.log(`${colors.cyan}${keyword}${colors.reset}`.padEnd(22) + taskStatus.padEnd(14) + `- ${t.title}`)
+            console.log(`${colors.cyan}${keyword}${colors.reset}`.padEnd(22) + taskStatus.padEnd(14) + `${t.title}`)
         })
         console.log("")
-        console.log("=".repeat(50))
+        divider(50)
+        console.log('')
         
     }
 }
