@@ -8,7 +8,7 @@ export default class Task {
         this.title = title.trim()
         this.proId = null
         this.proKeyword = null
-        this.createdAt = new Date().toLocaleString()
+        this.createdAt = new Date().toLocaleDateString()
         this.completed = false
         this.dueDate = null
     }

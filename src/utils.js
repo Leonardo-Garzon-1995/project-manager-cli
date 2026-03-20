@@ -18,6 +18,10 @@ const colors = {
     reset: "\x1b[0m",
 };
 
+function divider(num) {
+    process.stdout.write('-'.repeat(num) + '\n') // '─'
+}
+
 function displayBanner(title, text, color = colors.cyan) {
     console.log(color)
     console.log("╔" + "═".repeat(40) + "╗");
@@ -67,30 +71,30 @@ function displayHelp() {
     console.log(`       ${colors.brightyellow}pro${colors.reset} <command> [options]\n`);
     console.log(`   ${colors.green}COMMANDS:${colors.reset}`);
     console.log(`       ${colors.gray}Project Commands:`)
-    console.log(`       ${colors.cyan}add-project, -ap${colors.reset}`.padEnd(65, " ") + `Add a project`);
-    console.log(`       ${colors.cyan}list-projects, -lp${colors.reset}`.padEnd(65, " ") + `List projects`);
-    console.log(`       ${colors.cyan}view-project, -vp${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `View a project by index`);
-    console.log(`       ${colors.cyan}toggle-importance, -ti${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `Toggle importance of projects by index`);
-    console.log(`       ${colors.cyan}delete-project, -dp${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `Delete a project by index`);
-    console.log(`       ${colors.cyan}clear-projects${colors.reset}`.padEnd(65, " ") + `Clear all projects`);
+    console.log(`       ${colors.cyan}add-project, -ap${colors.reset}`.padEnd(62, " ") + `Add a project`);
+    console.log(`       ${colors.cyan}list-projects, -lp${colors.reset}`.padEnd(62, " ") + `List projects`);
+    console.log(`       ${colors.cyan}view-project, -vp${colors.gray} <pro-index>${colors.reset}`.padEnd(67, " ") + `View a project by index`);
+    console.log(`       ${colors.cyan}toggle-importance, -ti${colors.gray} <pro-index>${colors.reset}`.padEnd(67, " ") + `Toggle importance of projects by index`);
+    console.log(`       ${colors.cyan}delete-project, -dp${colors.gray} <pro-index>${colors.reset}`.padEnd(67, " ") + `Delete a project by index`);
+    console.log(`       ${colors.cyan}clear-projects${colors.reset}`.padEnd(62, " ") + `Clear all projects`);
     console.log("")
     console.log(`       ${colors.gray}Task Commands:`)
-    console.log(`       ${colors.cyan}add-task, -at${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `Add a task to a project by index`);
-    console.log(`       ${colors.cyan}list-tasks, -lt${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `List tasks in a project by index`);    
-    console.log(`       ${colors.cyan}view-task, -vt${colors.gray} <project-index> <task-index>${colors.reset}`.padEnd(70, " ") + `View a task by index`);
-    console.log(`       ${colors.cyan}task-completed, -tc${colors.gray} <project-index> <task-index>${colors.reset}`.padEnd(70, " ") + `Mark a task as completed by index`);
-    console.log(`       ${colors.cyan}list-completed-tasks, -lct${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `List completed tasks by project index`);
-    console.log(`       ${colors.cyan}list-pending-tasks, -lpt${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `List pending tasks by project index`);
-    console.log(`       ${colors.cyan}delete-task, -dt${colors.gray} <project-index> <task-index>${colors.reset}`.padEnd(70, " ") + `Delete a task by index`);
-    console.log(`       ${colors.cyan}clear-tasks${colors.gray} <project-index>${colors.reset}`.padEnd(70, " ") + `Clear all tasks by project index`);
+    console.log(`       ${colors.cyan}add-task, -at${colors.gray} <pro-index>${colors.reset}`.padEnd(67, " ") + `Add a task to a project by index`);
+    console.log(`       ${colors.cyan}list-tasks, -lt${colors.gray} <pro-index>${colors.reset}`.padEnd(67, " ") + `List tasks in a project by index`);    
+    console.log(`       ${colors.cyan}view-task, -vt${colors.gray} <pro-index> <task-index>${colors.reset}`.padEnd(67, " ") + `View a task by index`);
+    console.log(`       ${colors.cyan}task-completed, -tc${colors.gray} <pro-index> <task-index>${colors.reset}`.padEnd(67, " ") + `Mark a task as completed by index`);
+    console.log(`       ${colors.cyan}list-completed-tasks, -lct${colors.gray} <pro-index>${colors.reset}`.padEnd(67, " ") + `List completed tasks by project index`);
+    console.log(`       ${colors.cyan}list-pending-tasks, -lpt${colors.gray} <pro-index>${colors.reset}`.padEnd(67, " ") + `List pending tasks by project index`);
+    console.log(`       ${colors.cyan}delete-task, -dt${colors.gray} <pro-index> <task-index>${colors.reset}`.padEnd(67, " ") + `Delete a task by index`);
+    console.log(`       ${colors.cyan}clear-tasks${colors.gray} <pro-index>${colors.reset}`.padEnd(67, " ") + `Clear all tasks by project index`);
     console.log('')
-    console.log(`       ${colors.cyan}help, -h${colors.reset}`.padEnd(65, " ") + `Display this help message`);
+    console.log(`       ${colors.cyan}help, -h${colors.reset}`.padEnd(62, " ") + `Display this help message`);
     console.log("")
 }
 
 // OTHER UTILITIES
-function filterTasksByDate(input) {
-    const projectsWithTasks = input.filter(p => p.tasks.length > 0)
+function filterTasksByDate(projects) {
+    const projectsWithTasks = projects.filter(p => p.tasks.length > 0)
     const dailyTasks = []
 
     for (let i = 0; i < projectsWithTasks.length; i++) {
@@ -112,5 +116,6 @@ export {
     displayBanner,
     displayBannerThin,
     filterTasksByDate,
-    buildMiniBar
+    buildMiniBar,
+    divider
 }
