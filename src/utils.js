@@ -110,6 +110,10 @@ function filterTasksByDate(projects) {
     return dailyTasks
 }
 
+function isInavidDate(date) {
+    return isNaN(new Date(date).getTime())
+}
+
 export {
     colors,
     displayHelp,
@@ -117,5 +121,6 @@ export {
     displayBannerThin,
     filterTasksByDate,
     buildMiniBar,
-    divider
+    divider,
+    isInavidDate
 }

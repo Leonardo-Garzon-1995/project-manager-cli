@@ -1,5 +1,5 @@
 import Task from './task.js'
-import {colors} from '../utils.js'
+import {colors, isInavidDate} from '../utils.js'
 
 import readline from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
@@ -42,6 +42,12 @@ export default class Project {
         }
         let dueDate = await rl.question(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
         console.log("   │")
+        if (!dueDate) dueDate = "tomorrow"
+        if (isInavidDate(dueDate)) {
+            console.log(`   ${colors.red}♦${colors.reset} Invalid date format. Please enter a valid date in the format YYYY-MM-DD.`)
+            console.log("   │")
+            dueDate = await rl.question(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
+        }
         if (dueDate === "today") {
             dueDate = new Date().toLocaleDateString()
         }
@@ -54,11 +60,7 @@ export default class Project {
         if (dueDate === "month") {
             dueDate = new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString()
         }
-        while (!dueDate || typeof dueDate !== 'string') {
-            console.log("   A due date is required and must be a string")
-            dueDate = await rl.question(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
-            console.log("   │")
-        }
+
 
         const newTask = new Task(title)
         newTask.dueDate = new Date(dueDate).toLocaleDateString()
