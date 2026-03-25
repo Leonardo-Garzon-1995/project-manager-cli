@@ -1,5 +1,5 @@
 {
-  "name": "idea-tracker",
+  "name": "pro-manager",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
@@ -9,7 +9,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "projects",
+    "manager",
+    "cli",
+    "terminal"
+  ],
   "author": "Leonardo Garzon <lgarzonlc@gmail.com>",
   "license": "MIT",
   "description": ""
