@@ -30,7 +30,7 @@ export default class Project {
 
     async addTask() {
         const rl = readline.createInterface({ input, output, terminal: false })
-
+        console.log("")
         console.log(`   ${colors.brightyellow}♦ ${colors.cyan}Adding task to: ${this.title}${colors.reset}`)
         console.log("   │")
         let title = await rl.question(`   ${colors.brightyellow}♦ Enter task title: ${colors.reset}`)
@@ -43,11 +43,7 @@ export default class Project {
         let dueDate = await rl.question(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
         console.log("   │")
         if (!dueDate) dueDate = "tomorrow"
-        if (isInavidDate(dueDate)) {
-            console.log(`   ${colors.red}♦${colors.reset} Invalid date format. Please enter a valid date in the format YYYY-MM-DD.`)
-            console.log("   │")
-            dueDate = await rl.question(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
-        }
+        
         if (dueDate === "today") {
             dueDate = new Date().toLocaleDateString()
         }
@@ -59,6 +55,11 @@ export default class Project {
         }
         if (dueDate === "month") {
             dueDate = new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString()
+        }
+        if (isInavidDate(dueDate)) {
+            console.log(`   ${colors.red}♦${colors.reset} Invalid date format. Please enter a valid date in the format YYYY-MM-DD.`)
+            console.log("   │")
+            dueDate = await rl.question(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
         }
 
 
