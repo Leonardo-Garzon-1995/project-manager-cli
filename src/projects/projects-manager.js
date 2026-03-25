@@ -14,6 +14,7 @@ export default class ProjectsManager {
     async addProject(filePath) {
         const rl = readline.createInterface({ input, output, terminal: false })
         try {
+            console.log("")
             let title = await rl.question(`   ${colors.cyan}♦ Enter project title: ${colors.reset}`)
             console.log("   │")
             while (!title || typeof title !== 'string') {
@@ -36,6 +37,7 @@ export default class ProjectsManager {
 
             StorageService.save(filePath, this.projects)
             console.log(`   ${colors.green}\u2713 Project added successfully!${colors.reset}`)
+            console.log('')
 
         } catch (error) {
             console.log(error, error.message )
@@ -56,6 +58,7 @@ export default class ProjectsManager {
             await this.projects[projectIndex - 1].addTask()
             StorageService.save(filePath, this.projects)
             console.log(`   ${colors.green}\u2713 Task added successfully!${colors.reset}`)
+            console.log('')
 
         } catch (error) {
             console.log(error, error.message )
