@@ -17,7 +17,7 @@ A command-line tool to manage and track your projects — right from the termina
 
 ## Overview
 
-**Project Manager CLI**  is a lightweight Node.js command-line application that helps you keep track of your projects and ideas without ever leaving the terminal. It uses a simple local data store to store and manage your projects.
+**Project Manager CLI**  is a lightweight Node.js command-line application that helps you keep track of your projects and ideas without ever leaving the terminal. It uses a simple local data storege system to store and manage your projects.
 
 ---
 
@@ -55,17 +55,13 @@ pro <command> [options]
 ### Examples
 
 ```bash
-# Add a new project or idea
-pro add "My awesome project idea"
-
-# List all tracked projects
-pro list
-
-# Remove a project by ID
-pro remove <id>
+pro add-project      - prompts you to add a new project name, description, and keyword
+pro list-projects    - lists all projects 
+pro add-task         - prompts you to add a new task to a project
+pro list-tasks       - lists all tasks in a project
 ```
 
-> **Note:** Run `pro help` to see the full list of available commands and options.
+> Run `pro help` to see the full list of available commands and options.
 
 ---
 
@@ -74,15 +70,21 @@ pro remove <id>
 ```
 project-manager-cli/
 ├── bin/
-│   └── main.js        # CLI entry point
-├── src/               # Core application logic
+│   └── main.js                     # CLI entry point
+├── src/                            # Core application logic
 │   ├── projects/
-│   │   ├── project.js
-│   │   └── projects-manager.js
-
-├── data/              # Local data storage
+│   │   ├── project.js              # Project class with all the methods for managing projects
+│   │   ├── projects-manager.js     #  Main orchestrator class for managing projects and tasks
+│   │   └── task.js                 # Task class with all the methods for managing tasks
+│   ├── storage-service.js          # Manages saving and loiding the projects and tasks 
+│   ├── utils.js                    # Utility functions
+│   └── defaultUI.js                # Default UI functions
+├── data/     
+│   └── projects.json               # Local data storage
 ├── package.json
+├── README.md
 └── .gitignore
+
 ```
 
 ---
