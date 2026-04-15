@@ -173,15 +173,17 @@ export default class ProjectsManager {
             console.log(`   Task at index ${tIndex} does not exist.`)
             return
         }
+
         try {
             const updatedtasks = this.projects[pIndex - 1].deleteTaskByIndex(tIndex - 1)
+            
             this.projects[pIndex -1].tasks = updatedtasks
             
             StorageService.save(filePath, this.projects)
             console.log(`\n${colors.green}\u2713 Task deleted successfully!${colors.reset}`)
 
         } catch (error) {
-            console.log(error, error.message )
+            console.log(`   ${colors.red}Something went wrong. Try again.${colors.reset}`)
         }
     }
 
@@ -375,6 +377,12 @@ export default class ProjectsManager {
         displayBannerThin(currentDate, "YOUR TASKS FOR TODAY:")
         console.log(`PRO-REF`.padEnd(10) + `STATUS`.padEnd(8) + `TASK`)
         divider(50)
+        if (todayTasks.length < 1) {
+            console.log("\tNo tasks for today yet")
+            divider(50)
+            console.log('')
+            return
+        }
         todayTasks.forEach((t) => {
             const keyword = t.proKeyword ? t.proKeyword : "-------"
             let taskStatus = ""
