@@ -2,8 +2,8 @@
 
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { displayHelp} from '../src/utils.js'
-import { displayDeafultHeader } from '../src/defaultUI.js'
+import displayHelp  from '../src/helpers/displayHelp.js'
+import { displayDeafultHeader } from '../src/helpers/defaultUI.js'
 
 import ProjectsManager from '../src/projects/projects-manager.js'
 
@@ -62,6 +62,10 @@ function main(cmd) {
         case "-lpt":
             manager.listPendingTasksByIndex(args[0])
             break;
+        case 'tasks-bydate':
+        case '-tbd':
+            manager.displayTasksByDate(args[0])
+            break
         case "task-completed":
         case "-tc":
             manager.markTaskAsCompleted(FILE, args[0], args[1])
