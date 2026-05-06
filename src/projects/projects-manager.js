@@ -1,7 +1,8 @@
 import Project from './project.js'
 import StorageService from '../storage-service.js'
-import {colors, displayBanner, filterTasksByDate, displayBannerThin, buildMiniBar, divider} from '../utils.js'
-
+import {colors, displayBanner, displayBannerThin, buildMiniBar, divider} from '../helpers/format.js'
+import { isValidDate } from '../helpers/dates.js'
+import { filterTasksByDate } from '../helpers/filters.js'
 import readline from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
 
@@ -371,9 +372,9 @@ export default class ProjectsManager {
     }
 
     displayDailyTasks() {
-        const todayTasks = filterTasksByDate(this.projects)
         const currentDate = new Date().toLocaleDateString()
-
+        const todayTasks = filterTasksByDate(this.projects, currentDate)
+        
         displayBannerThin(currentDate, "YOUR TASKS FOR TODAY:")
         console.log(`PRO-REF`.padEnd(10) + `STATUS`.padEnd(8) + `TASK`)
         divider(50)
@@ -397,6 +398,42 @@ export default class ProjectsManager {
         divider(50)
         console.log('')
         
+    }
+
+    displayTasksByDate(date) {
+        const parsedDate = new Date(date).toLocaleDateString()
+        if (!isValidDate(parsedDate)) {
+            console.error('error: invalid date format')
+            console.log('Try YYYY-MM-DD')
+            return
+        }
+        const tasks = filterTasksByDate(this.projects, parsedDate)
+
+        displayBannerThin('YOUR TASKS FOR:', parsedDate)
+        console.log(`PRO-REF`.padEnd(10) + `STATUS`.padEnd(8) + `TASK`)
+        divider(50)
+        if (tasks.length < 1) {
+            console.log(`\tNo tasks for ${parsedDate}`)
+            divider(50)
+            console.log('')
+            return
+        }
+
+        tasks.forEach(t => {
+            const keyword = t.proKeyword ? t.proKeyword : "-------"
+            let taskStatus = ''
+
+            if (t.completed) {
+                taskStatus = `${colors.brightgreen}\u2713${colors.reset}`
+            } else {
+                taskStatus = `${colors.brightred}\u2717${colors.reset}`
+            }
+
+            console.log(`${colors.cyan}${keyword}${colors.reset}`.padEnd(22) + taskStatus.padEnd(14) + `${t.title}`)
+        })
+        console.log('')
+        divider(50)
+        console.log('')
     }
 }
 

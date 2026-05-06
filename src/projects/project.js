@@ -1,5 +1,6 @@
 import Task from './task.js'
-import {colors, isInavidDate} from '../utils.js'
+import { colors } from '../helpers/format.js'
+import { isValidDate } from '../helpers/dates.js'
 
 import readline from 'node:readline/promises'
 import { stdin as input, stdout as output } from 'node:process'
@@ -56,7 +57,7 @@ export default class Project {
         if (dueDate === "month") {
             dueDate = new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString()
         }
-        if (isInavidDate(dueDate)) {
+        while (!isValidDate(dueDate)) {
             console.log(`   ${colors.red}♦${colors.reset} Invalid date format. Please enter a valid date in the format YYYY-MM-DD.`)
             console.log("   │")
             dueDate = await rl.question(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
@@ -94,17 +95,19 @@ export default class Project {
     filterTasksByCompleted() {
         const completedTasks = this.tasks.filter(t => t.completed)
         if (completedTasks.length === 0) return console.log("No completed tasks found for this project.")
-        return completedTasks.forEach((t, index) => console.log(`[${colors.cyan}${index + 1}${colors.reset}] - ${t.title} (${colors.brightgreen}\u2713${colors.reset})`))
+        return completedTasks.forEach((t, index) => console.log(` (${colors.brightgreen}\u2713${colors.reset}) - ${t.title}`))
     }
 
     filterTasksByPending() {
         const pendingTasks = this.tasks.filter(t => !t.completed)
         if (pendingTasks.length === 0) return console.log("No pending tasks found for this project.")
-        return pendingTasks.forEach((t, index) => console.log(`[${colors.cyan}${index + 1}${colors.reset}] - ${t.title} (${colors.brightred}\u2717${colors.reset})`))
+        
+        return pendingTasks.forEach((t, index) => console.log(` (${colors.brightred}\u2717${colors.reset}) - ${t.title}`))
     }
 
     deleteTaskByIndex(...indexes) {
-        const filtered = this.tasks.filter((_, index) => !indexes.includes(index))
+        const parsedIndexes = indexes.map(index => parseInt(index))
+        const filtered = this.tasks.filter((_, index) => !parsedIndexes.includes(index))
         this.tasks = filtered
         return this.tasks
     }
