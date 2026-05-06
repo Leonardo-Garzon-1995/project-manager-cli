@@ -1,4 +1,4 @@
-import { colors } from './utils.js'
+import { colors } from './format.js'
 const helloASCII = `
 ┌─┐  ┌─┐┌─────┐┌─┐    ┌─┐    ┌─────┐
 │ │__│ ││ ╷───┘│ │    │ │    │ ┌─┐ │
@@ -46,8 +46,8 @@ function displayDeafultHeader() {
     const current = new Date().getHours()
     const morning = current < 12
     const afterNoon = current >= 12 && current < 18
-    const evening = current >= 18 && current < 22
-    const night = current >= 22
+    const evening = current >= 18 && current < 20
+    const night = current >= 20
 
     if (morning) {
         console.log(`${colors.cyan}`)
