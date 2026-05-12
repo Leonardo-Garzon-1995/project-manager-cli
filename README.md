@@ -76,9 +76,8 @@ project-manager-cli/
 │   │   ├── project.js              # Project class with all the methods for managing projects
 │   │   ├── projects-manager.js     #  Main orchestrator class for managing projects and tasks
 │   │   └── task.js                 # Task class with all the methods for managing tasks
-│   ├── storage-service.js          # Manages saving and loiding the projects and tasks 
-│   ├── utils.js                    # Utility functions
-│   └── defaultUI.js                # Default UI functions
+│   ├── storage-service.js          # Manages saving and loading the projects and tasks 
+│   └── helpers/                    # Utility functions  
 ├── data/     
 │   └── projects.json               # Local data storage
 ├── package.json
