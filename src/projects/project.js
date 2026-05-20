@@ -2,10 +2,6 @@ import Task from './task.js'
 import { colors } from '../helpers/format.js'
 import { isValidDate } from '../helpers/dates.js'
 
-import readline from 'node:readline/promises'
-import { stdin as input, stdout as output } from 'node:process'
-
-
 export default class Project {
     constructor(title, description, keyword) {
         this.id = `pro-${crypto.randomUUID()}`
@@ -29,48 +25,19 @@ export default class Project {
 
     // Tasks-affedted methods
 
-    async addTask() {
-        const rl = readline.createInterface({ input, output, terminal: false })
-        console.log("")
-        console.log(`   ${colors.brightyellow}♦ ${colors.cyan}Adding task to: ${this.title}${colors.reset}`)
-        console.log("   │")
-        let title = await rl.question(`   ${colors.brightyellow}♦ Enter task title: ${colors.reset}`)
-        console.log("   │")
-        while (!title || typeof title !== 'string') {
-            console.log("   A tile is required and must be a string")
-            title = await rl.question(`   ${colors.brightyellow}♦ Enter task title: ${colors.reset}`)
-            console.log("   │")
-        }
-        let dueDate = await rl.question(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
-        console.log("   │")
-        if (!dueDate) dueDate = "tomorrow"
-        
-        if (dueDate === "today") {
-            dueDate = new Date().toLocaleDateString()
-        }
-        if (dueDate === "tomorrow") {
-            dueDate = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString()
-        }
-        if (dueDate === "week") {
-            dueDate = new Date(new Date().setDate(new Date().getDate() + 7)).toLocaleDateString()
-        }
-        if (dueDate === "month") {
-            dueDate = new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString()
-        }
-        while (!isValidDate(dueDate)) {
-            console.log(`   ${colors.red}♦${colors.reset} Invalid date format. Please enter a valid date in the format YYYY-MM-DD.`)
-            console.log("   │")
-            dueDate = await rl.question(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
-        }
+    addTask(entries={}) {
 
+        const {
+            title,
+            dueDate
+
+        } = entries
 
         const newTask = new Task(title)
         newTask.dueDate = new Date(dueDate).toLocaleDateString()
         newTask.proId = this.id
         newTask.proKeyword = this.keyword
         this.tasks.push(newTask)
-
-        rl.close()
     }
 
     listTasks() {

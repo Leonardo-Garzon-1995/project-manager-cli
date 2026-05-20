@@ -3,8 +3,12 @@ import StorageService from '../storage-service.js'
 import {colors, displayBanner, displayBannerThin, buildMiniBar, divider} from '../helpers/format.js'
 import { isValidDate } from '../helpers/dates.js'
 import { filterTasksByDate } from '../helpers/filters.js'
-import readline from 'node:readline/promises'
-import { stdin as input, stdout as output } from 'node:process'
+
+import * as logger from '../helpers/logger.js'
+
+import Prompt from '../promptSys.js'
+
+// const prompt = new Prompt()
 
 export default class ProjectsManager {
     constructor(filePath) {
@@ -13,24 +17,23 @@ export default class ProjectsManager {
 
     // Project related methods
     async addProject(filePath) {
-        const rl = readline.createInterface({ input, output, terminal: false })
         try {
             console.log("")
-            let title = await rl.question(`   ${colors.cyan}♦ Enter project title: ${colors.reset}`)
+            let title = await Prompt.ask(`   ${colors.cyan}♦ Enter project title: ${colors.reset}`)
             console.log("   │")
             while (!title || typeof title !== 'string') {
                 console.log("   A tile is required and must be a string")
-                title = await rl.question(`   ${colors.cyan}♦ Enter project title: ${colors.reset}`)
+                title = await Prompt.ask(`   ${colors.cyan}♦ Enter project title: ${colors.reset}`)
                 console.log("   │")
             }
-            let description = await rl.question(`   ${colors.cyan}♦ Enter project description: ${colors.reset}`)
+            let description = await Prompt.ask(`   ${colors.cyan}♦ Enter project description: ${colors.reset}`)
             console.log("   │")
             while (!description || typeof description !== 'string') {
                 console.log("   A description is required and must be a string")
-                description = await rl.question(`   ${colors.cyan}♦ Enter project description: ${colors.reset}`)
+                description = await Prompt.ask(`   ${colors.cyan}♦ Enter project description: ${colors.reset}`)
                 console.log("   │")
             }
-            let keyword = (await rl.question(`   ${colors.cyan}♦ Give the project a keyword: ${colors.reset}`)).trim()
+            let keyword = (await Prompt.ask(`   ${colors.cyan}♦ Give the project a keyword: ${colors.reset}`)).trim()
             console.log("   │")
             if (keyword.length > 7) keyword = keyword.substring(0, 7)
             const project = new Project(title, description, keyword)
@@ -38,12 +41,13 @@ export default class ProjectsManager {
 
             StorageService.save(filePath, this.projects)
             console.log(`   ${colors.green}\u2713 Project added successfully!${colors.reset}`)
+            logger.info(`New Project: ${title}`)
             console.log('')
 
         } catch (error) {
+            logger.error(error.stack)
             console.log(error, error.message )
         }
-        rl.close()
     }
 
     async addTaskToProjectByIndex(filePath, projectIndex) {
@@ -56,14 +60,52 @@ export default class ProjectsManager {
             return
         }
         try {
-            await this.projects[projectIndex - 1].addTask()
+            const project = this.projects[projectIndex - 1]
+            console.log("")
+            console.log(`   ${colors.brightyellow}♦ ${colors.cyan}Adding task to: ${project.title}${colors.reset}`)
+            console.log("   │")
+            let title = await Prompt.ask(`   ${colors.brightyellow}♦ Enter task title: ${colors.reset}`)
+            while (!title || typeof title !== 'string') {
+                console.log(`   ${colors.red}♦${colors.reset} A title is required and must be a string.`)
+                console.log("   │")
+                title = await Prompt.ask(`   ${colors.brightyellow}♦ Enter task title: ${colors.reset}`)
+            }
+            console.log("   │")
+
+            let dueDate = await Prompt.ask(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
+            console.log("   │")
+            if (!dueDate) dueDate = "tomorrow"
+        
+            if (dueDate === "today") {
+                dueDate = new Date().toLocaleDateString()
+            }
+            if (dueDate === "tomorrow") {
+                dueDate = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString()
+            }
+            if (dueDate === "week") {
+                dueDate = new Date(new Date().setDate(new Date().getDate() + 7)).toLocaleDateString()
+            }
+            if (dueDate === "month") {
+                dueDate = new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString()
+            }
+            while (!isValidDate(dueDate)) {
+                console.log("   │")
+                console.log(`   ${colors.red}♦${colors.reset} Invalid date format. Please enter a valid date in the format YYYY-MM-DD.`)
+                console.log("   │")
+                dueDate = await Prompt.ask(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
+            }
+
+            project.addTask({title, dueDate})
+
             StorageService.save(filePath, this.projects)
             console.log(`   ${colors.green}\u2713 Task added successfully!${colors.reset}`)
             console.log('')
 
         } catch (error) {
+            logger.error(error.stack)
             console.log(error, error.message )
         }
+
     }
     
     toggleProjectImportance(filePath, pIndex) {
@@ -226,7 +268,7 @@ export default class ProjectsManager {
         
     }
 
-    clearTasksByProjectIndex(filePath, pIndex) {
+    async clearTasksByProjectIndex(filePath, pIndex) {
         if (!pIndex || Number.isNaN(parseInt(pIndex))) {
             console.log('   The project index must be a number')
             return
@@ -242,12 +284,18 @@ export default class ProjectsManager {
         }
 
         try {
-            this.projects[pIndex - 1].clearAllTasks()
-            StorageService.save(filePath, this.projects)
+            let approval = await Prompt.ask("Are you sure you want to clear all tasks (Y/n): ")
 
-            console.log("")
-            console.log(`${colors.brightgreen}\u2713 Tasks for project ${pIndex} have been cleared successfully!${colors.reset}`)
+            if (approval.trim() === 'y' || approval.trim() === 'Y' || approval.trim() === 'yes') {
+                this.projects[pIndex - 1].clearAllTasks()
+                StorageService.save(filePath, this.projects)
+
+                console.log("")
+                console.log(`${colors.brightgreen}\u2713 Tasks for project ${pIndex} have been cleared successfully!${colors.reset}`)
+            }
+            
         } catch (error) {
+            logger.error(error.stack)
             console.log(error, error.message)
         }
         
@@ -316,21 +364,27 @@ export default class ProjectsManager {
             this.projects = filtered
 
             StorageService.save(filePath, this.projects)
+            logger.info(`Project #${index} was deleted succesfully.`)
             console.log(`\n${colors.green}\u2713 Project "${index}" deleted successfully!${colors.reset}`)
         } catch (error) {
-            console.log(error, error.message )
+            logger.error(error.stack)
+            console.log(error.message )
         }
 
     }
 
-    clearAllProjects(filePath) {
-        try {
+    async clearAllProjects(filePath) {
+        let approval = await Prompt.ask("Are you sure you want to clear all projects (Y/n): ")
+
+        if (approval.trim() === 'y' || approval.trim() === 'Y' || approval.trim() === 'yes') {
+            try {
             this.projects = []
             StorageService.save(filePath, this.projects)
 
             console.log(`\n${colors.green}\u2713 AllProjects have been cleared successfully!${colors.reset}`)
-        } catch (error) {
-            console.log(error, error.message )
+            } catch (error) {
+                console.log(error, error.message )
+            }
         }
     }
     
@@ -436,4 +490,3 @@ export default class ProjectsManager {
         console.log('')
     }
 }
-
