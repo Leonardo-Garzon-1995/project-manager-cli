@@ -4,6 +4,15 @@ function isValidDate(input) {
     return !isNaN(d.getTime())
 }
 
+/**
+ * Generates an ISO 8601 string
+ * @returns {string}
+ */
+function generateTimestamp() {
+    return new Date().toISOString()
+}
+
 export {
-    isValidDate
+    isValidDate,
+    generateTimestamp
 }
