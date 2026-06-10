@@ -1,5 +1,6 @@
 // FORMATTING
 const colors = {
+    // Colors
     red: "\x1b[31m",
     green: "\x1b[32m",
     yellow: "\x1b[33m",
@@ -15,6 +16,15 @@ const colors = {
     brightmagenta: "\x1b[95m",
     brightcyan: "\x1b[96m",
     brightgray: "\x1b[97m",
+
+    // Styles
+    bold: "\x1b[1m",
+    dim: "\x1b[2m",
+    italic: "\x1b[3m",
+    underline: "\x1b[4m",
+    blink: "\x1b[5m",
+    hidden: "\x1b[8m",
+    strikethrough: "\x1b[9m",
     reset: "\x1b[0m",
 };
 
