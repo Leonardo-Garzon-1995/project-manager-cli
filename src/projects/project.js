@@ -1,10 +1,12 @@
 import Task from './task.js'
+import Note from '../notes/noteObject.js'
 import { colors } from '../helpers/format.js'
 import { isValidDate } from '../helpers/dates.js'
+import Id from '../helpers/id_system.js'
 
 export default class Project {
     constructor(title, description, keyword) {
-        this.id = `pro-${crypto.randomUUID()}`
+        this.id = Id.generateProId()
         this.title = title.trim()
         this.keyword = keyword? keyword.toUpperCase().trim() : title.slice(0, 5).toUpperCase().trim()
         this.description = description.trim()
@@ -13,7 +15,7 @@ export default class Project {
         this.highImportance = false
         this.tags = []
         this.tasks = []
-        
+        this.notes = []
     }
     
     // Project affected-directly methods
@@ -100,6 +102,32 @@ export default class Project {
         console.log(`${colors.cyan}♢ ${task.title}${colors.reset}\n`)
         console.log(`${colors.cyan}⚐ Due Date:${colors.reset} ${dueDate}`)
         console.log(`${colors.cyan}⚐ Completed:${colors.reset} ${task.completed ? `${colors.brightgreen}\u2713${colors.reset}` : `${colors.brightred}\u2717${colors.reset}`}\n`)
+    }
+
+    // Note related methods
+
+    addNote(title) {
+        const newNote = new Note(title)
+        newNote.proId = this.id
+
+        this.notes.push(newNote)
+    }
+
+    listNotes() {
+        if (this.notes.length === 0) {
+            console.log("No notes found for this project.")
+            return
+        }
+
+        this.notes.forEach((n, index) => {
+            console.log(`[${colors.cyan}${index + 1}${colors.reset}] - ${n.title}`)
+        })
+    }
+
+    deleteNoteByIndex(index) {
+        const filtered = this.notes.filter((_, i) => i !== Number(index))
+        this.notes = filtered
+        return this.notes
     }
 
 }

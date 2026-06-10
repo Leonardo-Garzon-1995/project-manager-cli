@@ -1,8 +1,8 @@
-import crypto from 'crypto'
+import Id from '../helpers/id_system.js'
 
 export default class Task {
     constructor(title) {
-        this.id = `tsk-${crypto.randomUUID()}`
+        this.id = Id.generateTaskId()
         this.title = title.trim()
         this.proId = null
         this.proKeyword = null
