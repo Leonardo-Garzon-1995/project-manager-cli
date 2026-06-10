@@ -85,6 +85,24 @@ function main(cmd) {
         case "-h":
             displayHelp()
             break;
+        case 'add-note':
+            manager.createNoteToProject(FILE, args[0])
+            break;
+        case 'read-note':
+            manager.readNoteFromProject(args[0], args[1])
+            break
+        case 'append-note':
+            manager.appendToNoteByProject(args[0], args[1])
+            break;
+        case 'delete-note':
+            manager.deleteNotefromProject(FILE, args[0], args[1])
+            break;
+        case 'clear-notes':
+            manager.clearAllNotesFromProject(FILE, args[0])
+            break;
+        case 'list-notes':
+            manager.listNotesByProject(args[0])
+            break
         default:
             console.log(`   Invalid command: <${cmd}>\n`)
             displayHelp()

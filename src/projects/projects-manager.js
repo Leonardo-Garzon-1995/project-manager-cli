@@ -3,12 +3,10 @@ import StorageService from '../storage-service.js'
 import {colors, displayBanner, displayBannerThin, buildMiniBar, divider} from '../helpers/format.js'
 import { isValidDate } from '../helpers/dates.js'
 import { filterTasksByDate } from '../helpers/filters.js'
-
+import { createNoteFile, readNoteFile, deleteNoteFile, appendToNoteFile } from '../notes/noteFile.js'
+import  * as prompter from '../prompt/prompter.js'
 import * as logger from '../helpers/logger.js'
 
-import Prompt from '../promptSys.js'
-
-// const prompt = new Prompt()
 
 export default class ProjectsManager {
     constructor(filePath) {
@@ -18,31 +16,16 @@ export default class ProjectsManager {
     // Project related methods
     async addProject(filePath) {
         try {
-            console.log("")
-            let title = await Prompt.ask(`   ${colors.cyan}♦ Enter project title: ${colors.reset}`)
-            console.log("   │")
-            while (!title || typeof title !== 'string') {
-                console.log("   A tile is required and must be a string")
-                title = await Prompt.ask(`   ${colors.cyan}♦ Enter project title: ${colors.reset}`)
-                console.log("   │")
-            }
-            let description = await Prompt.ask(`   ${colors.cyan}♦ Enter project description: ${colors.reset}`)
-            console.log("   │")
-            while (!description || typeof description !== 'string') {
-                console.log("   A description is required and must be a string")
-                description = await Prompt.ask(`   ${colors.cyan}♦ Enter project description: ${colors.reset}`)
-                console.log("   │")
-            }
-            let keyword = (await Prompt.ask(`   ${colors.cyan}♦ Give the project a keyword: ${colors.reset}`)).trim()
-            console.log("   │")
-            if (keyword.length > 7) keyword = keyword.substring(0, 7)
+            const { title, description, keyword } = await prompter.addProjectPrompt()
+
             const project = new Project(title, description, keyword)
             this.projects.push(project)
 
             StorageService.save(filePath, this.projects)
             console.log(`   ${colors.green}\u2713 Project added successfully!${colors.reset}`)
-            logger.info(`New Project: ${title}`)
             console.log('')
+
+            logger.info(`New Project: ${title}`)
 
         } catch (error) {
             logger.error(error.stack)
@@ -61,45 +44,15 @@ export default class ProjectsManager {
         }
         try {
             const project = this.projects[projectIndex - 1]
-            console.log("")
-            console.log(`   ${colors.brightyellow}♦ ${colors.cyan}Adding task to: ${project.title}${colors.reset}`)
-            console.log("   │")
-            let title = await Prompt.ask(`   ${colors.brightyellow}♦ Enter task title: ${colors.reset}`)
-            while (!title || typeof title !== 'string') {
-                console.log(`   ${colors.red}♦${colors.reset} A title is required and must be a string.`)
-                console.log("   │")
-                title = await Prompt.ask(`   ${colors.brightyellow}♦ Enter task title: ${colors.reset}`)
-            }
-            console.log("   │")
-
-            let dueDate = await Prompt.ask(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
-            console.log("   │")
-            if (!dueDate) dueDate = "tomorrow"
-        
-            if (dueDate === "today") {
-                dueDate = new Date().toLocaleDateString()
-            }
-            if (dueDate === "tomorrow") {
-                dueDate = new Date(new Date().setDate(new Date().getDate() + 1)).toLocaleDateString()
-            }
-            if (dueDate === "week") {
-                dueDate = new Date(new Date().setDate(new Date().getDate() + 7)).toLocaleDateString()
-            }
-            if (dueDate === "month") {
-                dueDate = new Date(new Date().setMonth(new Date().getMonth() + 1)).toLocaleDateString()
-            }
-            while (!isValidDate(dueDate)) {
-                console.log("   │")
-                console.log(`   ${colors.red}♦${colors.reset} Invalid date format. Please enter a valid date in the format YYYY-MM-DD.`)
-                console.log("   │")
-                dueDate = await Prompt.ask(`   ${colors.brightyellow}♦ Set due date (YYYY-MM-DD): ${colors.reset}`)
-            }
+            
+            const { title, dueDate } = await prompter.addTaskPrompt(project)
 
             project.addTask({title, dueDate})
 
             StorageService.save(filePath, this.projects)
             console.log(`   ${colors.green}\u2713 Task added successfully!${colors.reset}`)
             console.log('')
+            logger.info(`New task added: ${title}`)
 
         } catch (error) {
             logger.error(error.stack)
@@ -488,5 +441,218 @@ export default class ProjectsManager {
         console.log('')
         divider(50)
         console.log('')
+    }
+
+    async createNoteToProject(filePath, pIndex) {
+        if (!pIndex || Number.isNaN(parseInt(pIndex))) {
+            console.log('   The project index must be a number')
+            return
+        }
+
+        if (!this.projects[pIndex -1]) {
+            console.log(`   Project at index ${pIndex} does not exist.`)
+            return
+        }
+
+        try {
+            const project = this.projects[pIndex - 1]
+
+            const { title, text } = await prompter.addNotePrompt(project)
+
+            project.addNote(title) 
+            const newNote = project.notes[project.notes.length - 1]
+
+            createNoteFile(newNote, text)
+
+            StorageService.save(filePath, this.projects)
+
+            console.log(`   ${colors.green}\u2713 A new note has been added successfully!${colors.reset}`)
+        } catch (error) {
+            logger.error(error.stack)
+            console.error(error, error.message )
+        }
+
+    }
+
+    async appendToNoteByProject(proIndex, noteIndex) {
+        if (!proIndex || Number.isNaN(parseInt(proIndex))) {
+            console.log('   The project index must be a number')
+            return
+        }
+
+        if (!this.projects[proIndex -1]) {
+            console.log(`   Project at index ${proIndex} does not exist.`)
+            return
+        }
+
+        if (!noteIndex || Number.isNaN(parseInt(noteIndex))) {
+            console.log('   The note index must be a number')
+            return
+        }
+        
+        if (!this.projects[proIndex -1].notes[noteIndex -1]) {
+            console.log(`   Note at index ${noteIndex} does not exist.`)
+            return
+        }
+
+        try {
+            const project = this.projects[proIndex - 1]
+            const note = project.notes[noteIndex - 1]
+
+            console.log("")
+            console.log(`   ${colors.cyan}♦ Appending note to:${colors.reset} ${colors.underline + colors.bold}${note.title}${colors.reset}`)
+            console.log("   │")
+
+            let text = await prompter.individualPrompt({message:`  ${colors.cyan} ♦ Entry text: ${colors.reset}`, type: 'string'})
+            console.log("   │")
+            while (!text || typeof text !== 'string') {
+                console.log(`   ${colors.red}♦${colors.reset}A text entry is required`)
+                console.log("   │")
+                text = await prompter.individualPrompt({message:`  ${colors.cyan} ♦ Entry text: ${colors.reset}`, type: 'string'})
+                console.log("   │")
+            }
+
+
+            appendToNoteFile(note.id, text)
+
+            console.log(`   ${colors.green}\u2713 New note has been appended successfully!${colors.reset}`)
+
+        } catch (error) {
+            logger.error(error.stack)
+            console.error(error.message)
+        }
+        
+    }
+
+    listNotesByProject(proIndex) {
+        if (!proIndex || Number.isNaN(parseInt(proIndex))) {
+            console.log('   The project index must be a number')
+            return
+        }
+
+        if (!this.projects[proIndex -1]) {
+            console.log(`   Project at index ${proIndex} does not exist.`)
+            return
+        }
+
+        try{
+            const proName = `${proIndex} - ${this.projects[proIndex - 1].title}`
+            displayBanner("NOTES FOR:", proName)
+
+            if (this.projects[proIndex - 1].notes.length === 0) {
+                console.log(`This project has no notes.`)
+                console.log("")
+                console.log("=".repeat(42) + '\n')
+                return
+            }
+            this.projects[proIndex - 1].listNotes()
+            console.log("")
+            console.log("=".repeat(42) + '\n')
+        } catch (error) {
+            console.log(error, error.message)
+        }
+    
+
+    }
+
+    readNoteFromProject(proIndex, noteIndex) {
+        if (!proIndex || Number.isNaN(parseInt(proIndex))) {
+            console.log('   The project index must be a number')
+            return
+        }
+
+        if (!this.projects[proIndex -1]) {
+            console.log(`   Project at index ${proIndex} does not exist.`)
+            return
+        }
+
+        if (!noteIndex || Number.isNaN(parseInt(noteIndex))) {
+            console.log('   The note index must be a number')
+            return
+        }
+        
+        if (!this.projects[proIndex -1].notes[noteIndex -1]) {
+            console.log(`   Note at index ${noteIndex} does not exist.`)
+            return
+        }
+
+        try {
+            const project = this.projects[proIndex - 1]
+            const note = project.notes[noteIndex - 1]
+            const content = readNoteFile(note.id)
+
+            console.log(`\n${colors.cyan}---[ ${note.title} ]---${colors.reset}\n`)
+
+            console.log(content)
+        } catch (error) {
+            logger.error(error.stack)
+            console.error(error.message)
+        }
+    }
+
+    deleteNotefromProject(filePath, proIndex, noteIndex) {
+        if (!proIndex || Number.isNaN(parseInt(proIndex))) {
+            console.log('   The project index must be a number')
+            return
+        }
+
+        if (!this.projects[proIndex -1]) {
+            console.log(`   Project at index ${proIndex} does not exist.`)
+            return
+        }
+
+        if (!noteIndex || Number.isNaN(parseInt(noteIndex))) {
+            console.log('   The note index must be a number')
+            return
+        }
+        
+        if (!this.projects[proIndex -1].notes[noteIndex -1]) {
+            console.log(`   Note at index ${noteIndex} does not exist.`)
+            return
+        }
+
+        try {
+            const noteId = this.projects[proIndex - 1].notes[noteIndex - 1].id
+            const filteredNotes = this.projects[proIndex - 1].deleteNoteByIndex(noteIndex - 1)
+
+            deleteNoteFile(noteId)
+
+            this.projects[proIndex - 1].notes = filteredNotes
+
+            StorageService.save(filePath, this.projects)
+
+            console.log(`   ${colors.green}\u2713 Note has been deleted successfully!${colors.reset}`)
+
+        } catch(error) {
+            logger.error(error.stack) 
+            console.error(error.message)
+        }
+    }
+
+    clearAllNotesFromProject(filePath, proIndex) {
+        if (!proIndex || Number.isNaN(parseInt(proIndex))) {
+            console.log('   The project index must be a number')
+            return
+        }
+
+        if (!this.projects[proIndex -1]) {
+            console.log(`   Project at index ${proIndex} does not exist.`)
+            return
+        }
+
+        let notes = this.projects[proIndex - 1].notes
+
+        if (notes.length === 0) {
+            console.error(`No notes for this project`)
+            return
+        }
+
+        notes.forEach(note => {
+            deleteNoteFile(note.id)
+        })
+
+        this.projects[proIndex - 1].notes = []
+
+        StorageService.save(filePath, this.projects)
     }
 }
