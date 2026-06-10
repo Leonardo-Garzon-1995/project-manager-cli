@@ -2,6 +2,7 @@ import fs from "fs"
 
 import Project from "./projects/project.js"
 import Task from "./projects/task.js"
+import Note from "./notes/noteObject.js"
 
 
 export default class StorageService {
@@ -33,6 +34,13 @@ export default class StorageService {
                 task.dueDate = t.dueDate
                 task.completed = t.completed
                 project.tasks.push(task)
+            })
+            p.notes.map(n => {
+                const note = new Note(n.title)
+                note.id = n.id
+                note.proId = n.proId
+                note.createdAt = n.createdAt
+                project.notes.push(note)
             })
             return project
         })
