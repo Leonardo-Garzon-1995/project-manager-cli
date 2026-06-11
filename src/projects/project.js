@@ -1,7 +1,7 @@
 import Task from './task.js'
 import Note from '../notes/noteObject.js'
 import { colors } from '../helpers/format.js'
-import { isValidDate } from '../helpers/dates.js'
+import { isValidDate, generateTimestamp } from '../helpers/dates.js'
 import Id from '../helpers/id_system.js'
 
 export default class Project {
@@ -10,7 +10,7 @@ export default class Project {
         this.title = title.trim()
         this.keyword = keyword? keyword.toUpperCase().trim() : title.slice(0, 5).toUpperCase().trim()
         this.description = description.trim()
-        this.createdAt = new Date().toLocaleDateString()
+        this.createdAt = generateTimestamp()
         this.dueDate = null
         this.highImportance = false
         this.tags = []

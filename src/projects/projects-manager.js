@@ -5,6 +5,7 @@ import { isValidDate } from '../helpers/dates.js'
 import { filterTasksByDate } from '../helpers/filters.js'
 import { createNoteFile, readNoteFile, deleteNoteFile, appendToNoteFile } from '../notes/noteFile.js'
 import  * as prompter from '../prompt/prompter.js'
+import { validateProjectIndex, validateTaskIndex, validateNoteIndex } from '../helpers/validation.js'
 import * as logger from '../helpers/logger.js'
 
 
@@ -34,15 +35,9 @@ export default class ProjectsManager {
     }
 
     async addTaskToProjectByIndex(filePath, projectIndex) {
-        if (!projectIndex || Number.isNaN(parseInt(projectIndex))) {
-            console.log('   The project index must be a number')
-            return
-        }
-        if (!this.projects || !this.projects[projectIndex - 1]) {
-            console.log("   This project does not exist. Try a different project or create a new project.")
-            return
-        }
         try {
+            validateProjectIndex(projectIndex, this.projects)
+
             const project = this.projects[projectIndex - 1]
             
             const { title, dueDate } = await prompter.addTaskPrompt(project)
@@ -56,191 +51,130 @@ export default class ProjectsManager {
 
         } catch (error) {
             logger.error(error.stack)
-            console.log(error, error.message )
+            console.error(error.message )
         }
 
     }
     
-    toggleProjectImportance(filePath, pIndex) {
-        if (!pIndex || Number.isNaN(parseInt(pIndex))) {
-            console.log('   The project index must be a number')
-            return
-        }
-        if (!this.projects[pIndex -1]) {
-            console.log(`   Project at index ${pIndex} does not exist.`)
-            return
-        }
-        this.projects[pIndex -1].toggleHighImportance()
-        StorageService.save(filePath, this.projects)
-        
-        if (this.projects[pIndex -1].highImportance) {
-            console.log(`\n${colors.green}\u2713 Project at index ${pIndex} has been marked as high importance.${colors.reset}`)
-        } else {
-            console.log(`\n${colors.green}\u2713 Project at index ${pIndex} has been marked as low importance.${colors.reset}`)
+    toggleProjectImportance(filePath, projectIndex) {
+        try {
+            validateProjectIndex(projectIndex, this.projects)
+
+            this.projects[projectIndex -1].toggleHighImportance()
+            StorageService.save(filePath, this.projects)
+            
+            if (this.projects[projectIndex -1].highImportance) {
+                console.log(`\n${colors.green}\u2713 Project at index ${projectIndex} has been marked as high importance.${colors.reset}`)
+            } else {
+                console.log(`\n${colors.green}\u2713 Project at index ${projectIndex} has been marked as low importance.${colors.reset}`)
+            }
+        } catch (error) {
+            logger.error(error.stack);
+            console.error(error.message)
         }
     }
 
-    listCompletedTasksByIndex(pIndex) {
-        if (!pIndex || Number.isNaN(parseInt(pIndex))) {
-            console.log('   The project index must be a number')
-            return
-        }
-        if (!this.projects[pIndex -1]) {
-            console.log(`   Project at index ${pIndex} does not exist.`)
-            return
-        }
+    listCompletedTasksByIndex(projectIndex) {
 
         try {
-            displayBanner("COMPLETED TASKS FOR:", `${pIndex} - ${this.projects[pIndex - 1].title}`, colors.brightgreen)
-            this.projects[pIndex -1].filterTasksByCompleted()
+            validateProjectIndex(projectIndex, this.projects)
+
+            displayBanner("COMPLETED TASKS FOR:", `${projectIndex} - ${this.projects[projectIndex - 1].title}`, colors.brightgreen)
+            this.projects[projectIndex -1].filterTasksByCompleted()
             console.log("=".repeat(42) + '\n')
         } catch (error) {
-            console.log(error)
+            logger.error(error.stack)
+            console.error(error.message)
         }
     }
 
-    listPendingTasksByIndex(pIndex) {
-        if (!pIndex || Number.isNaN(parseInt(pIndex))) {
-            console.log('   The project index must be a number')
-            return
-        }
-        if (!this.projects[pIndex -1]) {
-            console.log(`   Project at index ${pIndex} does not exist.`)
-            return
-        }
+    listPendingTasksByIndex(projectIndex) {
         try {
-            displayBanner("PENDING TASKS FOR:", `${pIndex} - ${this.projects[pIndex - 1].title}`, colors.yellow)
-            this.projects[pIndex -1].filterTasksByPending()
+            validateProjectIndex(projectIndex, this.projects)
+
+            displayBanner("PENDING TASKS FOR:", `${projectIndex} - ${this.projects[projectIndex - 1].title}`, colors.yellow)
+            this.projects[projectIndex -1].filterTasksByPending()
             console.log("=".repeat(42) + '\n')
         } catch (error) {
-            console.log(error)
+            logger.error(error.stack)
+            console.error(error.message)
         }
     }
 
     // Tasks related methods
-    listTasksByProjectIndex(index) {
-        if (!index || Number.isNaN(parseInt(index))) {
-            console.log('   The project index must be a number.')
-            return
-        }
-
-        if (!this.projects[index - 1]) {
-            console.log(`   There is not a project at index ${index}`)
-            return 
-        }
+    listTasksByProjectIndex(projectIndex) {
 
         try{
-            const proName = `${index} - ${this.projects[index - 1].title}`
+            validateProjectIndex(projectIndex, this.projects)
+
+            const proName = `${projectIndex} - ${this.projects[projectIndex - 1].title}`
             displayBanner("TASKS FOR:", proName)
 
-            if (this.projects[index - 1].tasks.length === 0) {
+            if (this.projects[projectIndex - 1].tasks.length === 0) {
                 console.log(`This project has no tasks.`)
                 console.log("")
                 console.log("=".repeat(42) + '\n')
                 return
             }
-            this.projects[index - 1].listTasks()
+            this.projects[projectIndex - 1].listTasks()
             console.log("")
             console.log("=".repeat(42) + '\n')
         } catch (error) {
-            console.log(error, error.message)
+            logger.error(error.stack)
+            console.error(error.message)
         }
-
     }
 
-    deleteTask(filePath, pIndex, tIndex) {
-        if (!pIndex || Number.isNaN(parseInt(pIndex))) {
-            console.log('   The project index must be a number')
-            return
-        }
-
-        if (!this.projects[pIndex -1]) {
-            console.log(`   Project at index ${pIndex} does not exist.`)
-            return
-        }
-
-        if (!tIndex || Number.isNaN(parseInt(tIndex))) {
-            console.log('   The task index must be a number')
-            return
-        }
-        
-
-        if (!this.projects[pIndex -1].tasks[tIndex -1]) {
-            console.log(`   Task at index ${tIndex} does not exist.`)
-            return
-        }
+    deleteTask(filePath, projectIndex, taskIndex) {
 
         try {
-            const updatedtasks = this.projects[pIndex - 1].deleteTaskByIndex(tIndex - 1)
+            validateTaskIndex(taskIndex, projectIndex, this.projects)
+
+            const updatedtasks = this.projects[projectIndex - 1].deleteTaskByIndex(taskIndex - 1)
             
-            this.projects[pIndex -1].tasks = updatedtasks
+            this.projects[projectIndex -1].tasks = updatedtasks
             
             StorageService.save(filePath, this.projects)
             console.log(`\n${colors.green}\u2713 Task deleted successfully!${colors.reset}`)
 
         } catch (error) {
-            console.log(`   ${colors.red}Something went wrong. Try again.${colors.reset}`)
+            logger.error(error.stack)
+            console.error(error.message)
         }
     }
 
-    markTaskAsCompleted(filePath, pIndex, tIndex) {
-        if (!pIndex || Number.isNaN(parseInt(pIndex))) {
-            console.log('   The project index must be a number')
-            return
-        }
-
-        if (!this.projects[pIndex -1]) {
-            console.log(`   Project at index ${pIndex} does not exist.`)
-            return
-        }
-
-        if (!tIndex || Number.isNaN(parseInt(tIndex))) {
-            console.log('   The task index must be a number')
-            return
-        }
-        
-        if (!this.projects[pIndex -1].tasks[tIndex -1]) {
-            console.log(`   Task at index ${tIndex} does not exist.`)
-            return
-        }
-
-        if (this.projects[pIndex -1].tasks[tIndex -1].completed) {
-            console.log(`   Task at index ${tIndex} is already completed.`)
-            return
-        }
-
+    markTaskAsCompleted(filePath, projectIndex, taskIndex) {
         try {
-            this.projects[pIndex - 1].setTaskAsCompletedByIndex(tIndex)
+            validateTaskIndex(taskIndex, projectIndex, this.projects)
+            if (this.projects[projectIndex -1].tasks[taskIndex -1].completed) {
+                throw new Error(`   Task at index ${taskIndex} is already completed.`)
+            }
+            this.projects[projectIndex - 1].setTaskAsCompletedByIndex(taskIndex)
             StorageService.save(filePath, this.projects)
 
             console.log("")
-            console.log(`${colors.brightgreen}\u2713 Task ${tIndex} has been marked as completed!${colors.reset}`)
+            console.log(`${colors.brightgreen}\u2713 Task ${taskIndex} has been marked as completed!${colors.reset}`)
         } catch (error) {
-            console.log(error)
+            logger.error(error.stack)
+            console.error(error.message)
         }
-        
     }
 
-    async clearTasksByProjectIndex(filePath, pIndex) {
-        if (!pIndex || Number.isNaN(parseInt(pIndex))) {
-            console.log('   The project index must be a number')
-            return
-        }
-        if (!this.projects[pIndex -1]) {
-            console.log(`   Project at index ${pIndex} does not exist.`)
-            return
-        }
-
-        if (this.projects[pIndex -1].tasks.length === 0) {
-            console.log(`   Project at index ${pIndex} has no tasks.`)
-            return
-        }
+    async clearTasksByProjectIndex(filePath, projectIndex) {
 
         try {
-            let approval = await Prompt.ask("Are you sure you want to clear all tasks (Y/n): ")
+            validateProjectIndex(projectIndex, this.projects)
+
+            if (this.projects[projectIndex -1].tasks.length === 0) {
+                throw new Error(`   Project at index ${projectIndex} has no tasks.`)
+            }
+            let approval = await prompter.individualPrompt({
+                message: "Are you sure you wnat to clear all the tasks for this project? (Y/n): ",
+                type: 'string'
+            })
 
             if (approval.trim() === 'y' || approval.trim() === 'Y' || approval.trim() === 'yes') {
-                this.projects[pIndex - 1].clearAllTasks()
+                this.projects[projectIndex - 1].clearAllTasks()
                 StorageService.save(filePath, this.projects)
 
                 console.log("")
@@ -249,36 +183,19 @@ export default class ProjectsManager {
             
         } catch (error) {
             logger.error(error.stack)
-            console.log(error, error.message)
+            console.error(error.message)
         }
         
     }
 
-    viewTaskByIndex(pIndex, tIndex) {
-        if (!pIndex || Number.isNaN(parseInt(pIndex))) {
-            console.log('   The project index must be a number')
-            return
-        }
-
-        if (!this.projects[pIndex -1]) {
-            console.log(`   Project at index ${pIndex} does not exist.`)
-            return
-        }
-
-        if (!tIndex || Number.isNaN(parseInt(tIndex))) {
-            console.log('   The task index must be a number')
-            return
-        }  
-
-        if (!this.projects[pIndex -1].tasks[tIndex -1]) {
-            console.log(`   Task at index ${tIndex} does not exist.`)
-            return
-        }
-
+    viewTaskByIndex(projectIndex, taskIndex) {
         try {
-            this.projects[pIndex - 1].viewTaskByIndex(tIndex)
+            validateTaskIndex(taskIndex, projectIndex, this.projects)
+
+            this.projects[projectIndex - 1].viewTaskByIndex(taskIndex)
         } catch (error) {
-            console.log(error, error.message)
+            logger.error(error.stack)
+            console.error(error.message)
         }
     }
 
@@ -293,41 +210,39 @@ export default class ProjectsManager {
             return
         }
         this.projects.forEach((p, index) => {
+            const hasNotes = p.notes.length > 0 ? `${colors.brightblue}\u270E${colors.reset}` : ``
             const indexPlusOne = index + 1
-            const highImportance = p.highImportance ? `${colors.brightgreen}\u2191${colors.reset}` : `\u2193`
+            const highImportance = p.highImportance ? `${colors.brightgreen + colors.bold}\u0021${colors.reset}` : ''
             const numberOfTasks = p.tasks.length > 0 ? `{${colors.brightyellow}${p.tasks.length}${colors.reset}}` : ``
-            console.log(`[${colors.cyan}${indexPlusOne}${colors.reset}] - ${p.title} (${highImportance}) ${numberOfTasks}`)
+            console.log(`[${colors.cyan}${indexPlusOne}${colors.reset}] - ${p.title} ${numberOfTasks} ${highImportance}${hasNotes}`)
             
         })
         console.log("")
         console.log("=".repeat(42) + '\n')
     }
 
-    deleteProjectByIndex(filePath, index) {
-        if (!index || Number.isNaN(parseInt(index))) {
-            console.log('   The project index must be a number')
-            return
-        }
-        if (!this.projects[index - 1]) {
-            console.log(`   There is not a project at index ${index}`)
-            return
-        }
+    deleteProjectByIndex(filePath, projectIndex) {
         try {
-            const filtered = this.projects.filter((_, i) => i !== index - 1)
+            validateProjectIndex(projectIndex, this.projects)
+
+            const filtered = this.projects.filter((_, i) => i !== projectIndex - 1)
             this.projects = filtered
 
             StorageService.save(filePath, this.projects)
-            logger.info(`Project #${index} was deleted succesfully.`)
-            console.log(`\n${colors.green}\u2713 Project "${index}" deleted successfully!${colors.reset}`)
+            console.log(`\n${colors.green}\u2713 Project "${projectIndex}" deleted successfully!${colors.reset}`)
+        
         } catch (error) {
             logger.error(error.stack)
-            console.log(error.message )
+            console.log(error.message)
         }
 
     }
 
     async clearAllProjects(filePath) {
-        let approval = await Prompt.ask("Are you sure you want to clear all projects (Y/n): ")
+        let approval = await prompter.individualPrompt({
+            message: "Are you sure you want to clear all projects (Y/n): ",
+            type: 'string'
+        })
 
         if (approval.trim() === 'y' || approval.trim() === 'Y' || approval.trim() === 'yes') {
             try {
@@ -336,29 +251,23 @@ export default class ProjectsManager {
 
             console.log(`\n${colors.green}\u2713 AllProjects have been cleared successfully!${colors.reset}`)
             } catch (error) {
-                console.log(error, error.message )
+                console.log(error.message )
             }
         }
     }
     
-    viewProjectByIndex(index) {
-        if (!index || Number.isNaN(parseInt(index))) {
-            console.log('   The project index must be a number')
-            return
-        }
-
-        if (!this.projects[index - 1]) {
-            console.log(`   There is not a project at index ${index}`)
-            return
-        }
+    viewProjectByIndex(projectIndex) {
 
         try {
-            const project = this.projects[index - 1]
+            validateProjectIndex(projectIndex, this.projects)
+
+            const project = this.projects[projectIndex - 1]
             const importance = project.highImportance ? `${colors.brightgreen}High${colors.reset}` : `Low`
             const doneTasks = project.tasks.filter(t => t.completed).length
             const totalTasks = project.tasks.length
             const dueDate = project.dueDate ? new Date(project.dueDate).toLocaleDateString() : "No due date"
             const cratedAt = new Date(project.createdAt).toLocaleDateString()
+            const notesCount = project.notes.length
 
             console.log("")
             console.log(`_______PROJECT_______`)
@@ -369,11 +278,13 @@ export default class ProjectsManager {
             console.log(`${colors.cyan}⚐ Due Date:${colors.reset} ${dueDate}`)
             console.log(`${colors.cyan}⚐ Importance:${colors.reset} ${importance}`)
             console.log(`${colors.cyan}⚐ Tasks: ${buildMiniBar(doneTasks, totalTasks, totalTasks)} ${colors.green}${doneTasks}${colors.reset}/${totalTasks}`)
+            console.log(`${colors.cyan}⚐ Notes:${colors.reset} ${notesCount}`)
             if (project.tags.length > 0) { console.log(`${colors.cyan}⚐ Tags:${colors.reset} ${project.tags.join(", ")}`)}
             console.log(`${colors.cyan}⚐ Description:${colors.reset} ${project.description}\n`)
 
         } catch (error) {
-            console.log(error, error.message )
+            logger.error(error.stack)
+            console.error(error.message )
         }
         
     }
@@ -443,19 +354,12 @@ export default class ProjectsManager {
         console.log('')
     }
 
-    async createNoteToProject(filePath, pIndex) {
-        if (!pIndex || Number.isNaN(parseInt(pIndex))) {
-            console.log('   The project index must be a number')
-            return
-        }
-
-        if (!this.projects[pIndex -1]) {
-            console.log(`   Project at index ${pIndex} does not exist.`)
-            return
-        }
+    async createNoteToProject(filePath, projectIndex) {
 
         try {
-            const project = this.projects[pIndex - 1]
+            validateProjectIndex(projectIndex, this.projects)
+
+            const project = this.projects[projectIndex - 1]
 
             const { title, text } = await prompter.addNotePrompt(project)
 
@@ -469,34 +373,16 @@ export default class ProjectsManager {
             console.log(`   ${colors.green}\u2713 A new note has been added successfully!${colors.reset}`)
         } catch (error) {
             logger.error(error.stack)
-            console.error(error, error.message )
+            console.error(error.message)
         }
-
     }
 
-    async appendToNoteByProject(proIndex, noteIndex) {
-        if (!proIndex || Number.isNaN(parseInt(proIndex))) {
-            console.log('   The project index must be a number')
-            return
-        }
-
-        if (!this.projects[proIndex -1]) {
-            console.log(`   Project at index ${proIndex} does not exist.`)
-            return
-        }
-
-        if (!noteIndex || Number.isNaN(parseInt(noteIndex))) {
-            console.log('   The note index must be a number')
-            return
-        }
-        
-        if (!this.projects[proIndex -1].notes[noteIndex -1]) {
-            console.log(`   Note at index ${noteIndex} does not exist.`)
-            return
-        }
+    async appendToNoteByProject(projectIndex, noteIndex) {
 
         try {
-            const project = this.projects[proIndex - 1]
+            validateNoteIndex(noteIndex, projectIndex, this.projects)
+
+            const project = this.projects[projectIndex - 1]
             const note = project.notes[noteIndex - 1]
 
             console.log("")
@@ -524,60 +410,33 @@ export default class ProjectsManager {
         
     }
 
-    listNotesByProject(proIndex) {
-        if (!proIndex || Number.isNaN(parseInt(proIndex))) {
-            console.log('   The project index must be a number')
-            return
-        }
-
-        if (!this.projects[proIndex -1]) {
-            console.log(`   Project at index ${proIndex} does not exist.`)
-            return
-        }
-
+    listNotesByProject(projectIndex) {
         try{
-            const proName = `${proIndex} - ${this.projects[proIndex - 1].title}`
+            validateProjectIndex(projectIndex, this.projects)
+
+            const proName = `${proIndex} - ${this.projects[projectIndex - 1].title}`
             displayBanner("NOTES FOR:", proName)
 
-            if (this.projects[proIndex - 1].notes.length === 0) {
+            if (this.projects[projectIndex - 1].notes.length === 0) {
                 console.log(`This project has no notes.`)
                 console.log("")
                 console.log("=".repeat(42) + '\n')
                 return
             }
-            this.projects[proIndex - 1].listNotes()
+            this.projects[projectIndex - 1].listNotes()
             console.log("")
             console.log("=".repeat(42) + '\n')
         } catch (error) {
-            console.log(error, error.message)
+            logger.error(error.stack)
+            console.log(error.message)
         }
-    
-
     }
 
-    readNoteFromProject(proIndex, noteIndex) {
-        if (!proIndex || Number.isNaN(parseInt(proIndex))) {
-            console.log('   The project index must be a number')
-            return
-        }
-
-        if (!this.projects[proIndex -1]) {
-            console.log(`   Project at index ${proIndex} does not exist.`)
-            return
-        }
-
-        if (!noteIndex || Number.isNaN(parseInt(noteIndex))) {
-            console.log('   The note index must be a number')
-            return
-        }
-        
-        if (!this.projects[proIndex -1].notes[noteIndex -1]) {
-            console.log(`   Note at index ${noteIndex} does not exist.`)
-            return
-        }
-
+    readNoteFromProject(projectIndex, noteIndex) {
         try {
-            const project = this.projects[proIndex - 1]
+            validateNoteIndex(noteIndex, projectIndex, this.projects)
+
+            const project = this.projects[projectIndex - 1]
             const note = project.notes[noteIndex - 1]
             const content = readNoteFile(note.id)
 
@@ -590,69 +449,55 @@ export default class ProjectsManager {
         }
     }
 
-    deleteNotefromProject(filePath, proIndex, noteIndex) {
-        if (!proIndex || Number.isNaN(parseInt(proIndex))) {
-            console.log('   The project index must be a number')
-            return
-        }
-
-        if (!this.projects[proIndex -1]) {
-            console.log(`   Project at index ${proIndex} does not exist.`)
-            return
-        }
-
-        if (!noteIndex || Number.isNaN(parseInt(noteIndex))) {
-            console.log('   The note index must be a number')
-            return
-        }
-        
-        if (!this.projects[proIndex -1].notes[noteIndex -1]) {
-            console.log(`   Note at index ${noteIndex} does not exist.`)
-            return
-        }
-
+    deleteNotefromProject(filePath, projectIndex, noteIndex) {
         try {
-            const noteId = this.projects[proIndex - 1].notes[noteIndex - 1].id
-            const filteredNotes = this.projects[proIndex - 1].deleteNoteByIndex(noteIndex - 1)
+            validateNoteIndex(noteIndex, projectIndex, this.projects)
+
+            const noteId = this.projects[projectIndex - 1].notes[noteIndex - 1].id
+            const filteredNotes = this.projects[projectIndex - 1].deleteNoteByIndex(noteIndex - 1)
 
             deleteNoteFile(noteId)
 
-            this.projects[proIndex - 1].notes = filteredNotes
+            this.projects[projectIndex - 1].notes = filteredNotes
 
             StorageService.save(filePath, this.projects)
 
             console.log(`   ${colors.green}\u2713 Note has been deleted successfully!${colors.reset}`)
-
         } catch(error) {
             logger.error(error.stack) 
             console.error(error.message)
         }
     }
 
-    clearAllNotesFromProject(filePath, proIndex) {
-        if (!proIndex || Number.isNaN(parseInt(proIndex))) {
-            console.log('   The project index must be a number')
-            return
+    async clearAllNotesFromProject(filePath, projectIndex) {
+        try {
+            validateProjectIndex(projectIndex, this.projects)
+
+            let notes = this.projects[projetIndex - 1].notes
+
+            if (notes.length === 0) {
+                throw new Error(`No notes for this project`)
+            }
+
+            let approval = await prompter.individualPrompt({
+                message: "Are you sure you want to clear all notes for this project? (Y/n): ",
+                type: 'string'
+            })
+
+            if (approval.trim() === 'y' || approval.trim() === 'Y' || approval.trim() === 'yes') {
+                notes.forEach(note => {
+                    deleteNoteFile(note.id)
+                })
+
+                this.projects[proIndex - 1].notes = []
+
+                StorageService.save(filePath, this.projects)
+                console.log(`   ${colors.green}\u2713 All notes have been deleted successfully!${colors.reset}`)
+            }
+
+        } catch (error) {
+            logger.error(error.stack)
+            console.error(error.message)
         }
-
-        if (!this.projects[proIndex -1]) {
-            console.log(`   Project at index ${proIndex} does not exist.`)
-            return
-        }
-
-        let notes = this.projects[proIndex - 1].notes
-
-        if (notes.length === 0) {
-            console.error(`No notes for this project`)
-            return
-        }
-
-        notes.forEach(note => {
-            deleteNoteFile(note.id)
-        })
-
-        this.projects[proIndex - 1].notes = []
-
-        StorageService.save(filePath, this.projects)
     }
 }
