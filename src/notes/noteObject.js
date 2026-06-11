@@ -10,12 +10,7 @@ export default class Note {
     }
 
     getPath() {
-        const id = this.id
-
-        const dirName = id.slice(0, 6)
-        const filename = id.slice(6)
-
-        return {dirName, filename}
+        return this.id
     }
 
     isValidId() {
