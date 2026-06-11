@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 import Note from './noteObject.js'
+import { validateNoteId } from '../helpers/validation.js'
 import { fileURLToPath } from 'node:url'
-import { dir } from 'node:console'
 
 const __filename  = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -18,22 +18,17 @@ function ensureDir() {
 function createNoteFile(noteObj, text) {
     ensureDir()
 
-    const { dirName, filename } = noteObj.getPath()
+    const noteId = noteObj.getPath()
 
-    const dirPath = path.join(NOTES_DATA_DIR, dirName)
-    const fullPath = path.join(dirPath, filename)
-
-    fs.mkdirSync(dirPath, {recursive: true})
+    const fullPath = path.join(NOTES_DATA_DIR, noteId)
 
     fs.writeFileSync(fullPath, text + '\n') 
-
 }
 
 function readNoteFile(noteId) {
-    const dirName = noteId.slice(0, 6)
-    const filename = noteId.slice(6)
+    validateNoteId(noteId)
 
-    const fullPath = path.join(NOTES_DATA_DIR, dirName, filename)
+    const fullPath = path.join(NOTES_DATA_DIR, noteId)
 
     if (!fs.existsSync(fullPath)) {
         console.error('Note does not exist')
@@ -46,10 +41,9 @@ function readNoteFile(noteId) {
 }
 
 function appendToNoteFile(noteId, text) {
-    const dirName = noteId.slice(0, 6)
-    const filename = noteId.slice(6)
+    validateNoteId(noteId)
 
-    const fullPath = path.join(NOTES_DATA_DIR, dirName, filename)
+    const fullPath = path.join(NOTES_DATA_DIR, noteId)
     if (!fs.existsSync(fullPath)) {
         console.error('Note does not exist')
         return
@@ -61,17 +55,15 @@ function appendToNoteFile(noteId, text) {
 }
 
 function deleteNoteFile(noteId) {
-    const dirName = noteId.slice(0, 6)
-    const filename = noteId.slice(6)
+    validateNoteId(noteId)
 
-    const fullPath = path.join(NOTES_DATA_DIR, dirName, filename)
+    const fullPath = path.join(NOTES_DATA_DIR, noteId)
     if (!fs.existsSync(fullPath)) {
         console.error('Note does not exist')
         return
     }
-    const noteDir = path.dirname(fullPath)
-
-    fs.rmSync(noteDir, {recursive: true, force: true})
+    
+    fs.unlinkSync(fullPath)
 
 }
 
