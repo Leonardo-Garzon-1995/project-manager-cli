@@ -449,7 +449,7 @@ export default class ProjectsManager {
         }
     }
 
-    deleteNotefromProject(filePath, projectIndex, noteIndex) {
+    deleteNoteFromProject(filePath, projectIndex, noteIndex) {
         try {
             validateNoteIndex(noteIndex, projectIndex, this.projects)
 
