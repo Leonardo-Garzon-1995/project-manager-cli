@@ -1,8 +1,19 @@
+import { colors } from '../helpers/format.js'
+const validOptions = [
+    'add', '-a', 'list', '-l', 'delete',
+    '-d', 'view', '-v', 'append', '-ap',
+    'clear', 'all'
+]
+
 export default function NoteCommand(argv, mgr, filePath) {
     if (argv.length === 0) {
-        console.error("An option is required")
-        return
+        throw new Error("An option is required")
     }
+
+    if (!validOptions.includes(argv[0])) {
+        throw new Error(`   ${colors.red}Invalid command option: <${argv[0]}>${colors.reset}\n`)
+    }
+    
     switch(argv[0]) {
         case 'add':
         case '-a':
@@ -26,6 +37,9 @@ export default function NoteCommand(argv, mgr, filePath) {
             break;
         case 'clear':
             mgr.clearAllNotesFromProject(filePath, argv[1])
+            break
+        case 'all':
+            mgr.filterAllNotes()
             break
     }
 }

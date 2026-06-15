@@ -1,8 +1,21 @@
+import { colors } from '../helpers/format.js'
+const validOptions = [
+    'add', '-a', 'list', '-l', 'delete',
+    '-d', 'view', '-v', 'important', '-i',
+    'clear'
+]
+
+
 export default function projectCommand(argv, mgr, filePath) {
     if (argv.length === 0) {
         mgr.listProjects()
         return 
     }
+
+    if (!validOptions.includes(argv[0])) {
+        throw new Error(`   ${colors.red}Invalid command option: <${argv[0]}>${colors.reset}\n`)
+    }
+    
     switch(argv[0]) {
         case 'add':
         case '-a':
