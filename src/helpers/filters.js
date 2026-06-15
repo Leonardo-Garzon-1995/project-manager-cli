@@ -21,9 +21,29 @@ function filterTasksByDate(projects, date) {
     const filterdbyDate = tasks.filter(t => t.dueDate === parsedDate)
 
     return filterdbyDate.length > 0 ? filterdbyDate : []
+}
 
+function filterNotes(projects, callback) {
+    const projectsWithNotes = projects.filter(p => p.notes.length > 0)
+
+    const result = []
+
+    projectsWithNotes.forEach(p => {
+        result.push(...p.notes)
+    })
+
+    if (arguments.length < 2) {
+        return result 
+    } else {
+        if (typeof callback !== 'function') {
+            throw new Error('the callback argument must be of type function')
+        }
+
+        return result.filter(callback)
+    }
 }
 
 export {
-    filterTasksByDate
+    filterTasksByDate,
+    filterNotes
 }
