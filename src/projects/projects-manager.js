@@ -2,7 +2,7 @@ import Project from './project.js'
 import StorageService from '../storage-service.js'
 import {colors, displayBanner, displayBannerThin, buildMiniBar, divider} from '../helpers/format.js'
 import { isValidDate } from '../helpers/dates.js'
-import { filterTasksByDate } from '../helpers/filters.js'
+import { filterTasksByDate, filterNotes } from '../helpers/filters.js'
 import { createNoteFile, readNoteFile, deleteNoteFile, appendToNoteFile } from '../notes/noteFile.js'
 import  * as prompter from '../prompt/prompter.js'
 import { validateProjectIndex, validateTaskIndex, validateNoteIndex } from '../helpers/validation.js'
@@ -30,7 +30,7 @@ export default class ProjectsManager {
 
         } catch (error) {
             logger.error(error.stack)
-            console.log(error, error.message )
+            console.error(error.message )
         }
     }
 
@@ -178,7 +178,7 @@ export default class ProjectsManager {
                 StorageService.save(filePath, this.projects)
 
                 console.log("")
-                console.log(`${colors.brightgreen}\u2713 Tasks for project ${pIndex} have been cleared successfully!${colors.reset}`)
+                console.log(`${colors.brightgreen}\u2713 Tasks for project ${projectIndex} have been cleared successfully!${colors.reset}`)
             }
             
         } catch (error) {
@@ -365,6 +365,7 @@ export default class ProjectsManager {
 
             project.addNote(title) 
             const newNote = project.notes[project.notes.length - 1]
+            newNote.proKeyword = project.keyword
 
             createNoteFile(newNote, text)
 
@@ -414,7 +415,7 @@ export default class ProjectsManager {
         try{
             validateProjectIndex(projectIndex, this.projects)
 
-            const proName = `${proIndex} - ${this.projects[projectIndex - 1].title}`
+            const proName = `${projectIndex} - ${this.projects[projectIndex - 1].title}`
             displayBanner("NOTES FOR:", proName)
 
             if (this.projects[projectIndex - 1].notes.length === 0) {
@@ -473,7 +474,7 @@ export default class ProjectsManager {
         try {
             validateProjectIndex(projectIndex, this.projects)
 
-            let notes = this.projects[projetIndex - 1].notes
+            let notes = this.projects[projectIndex - 1].notes
 
             if (notes.length === 0) {
                 throw new Error(`No notes for this project`)
@@ -484,20 +485,41 @@ export default class ProjectsManager {
                 type: 'string'
             })
 
-            if (approval.trim() === 'y' || approval.trim() === 'Y' || approval.trim() === 'yes') {
+            if (approval.trim() === 'y' || approval.trim() === 'Y' || approval.trim() === 'yes' || approval.trim() === 'YES') {
                 notes.forEach(note => {
                     deleteNoteFile(note.id)
                 })
 
-                this.projects[proIndex - 1].notes = []
+                this.projects[projectIndex - 1].notes = []
 
                 StorageService.save(filePath, this.projects)
                 console.log(`   ${colors.green}\u2713 All notes have been deleted successfully!${colors.reset}`)
+            } else {
+                return
             }
 
         } catch (error) {
             logger.error(error.stack)
             console.error(error.message)
         }
+    }
+
+    filterAllNotes() {
+        const notes = filterNotes(this.projects)
+
+        displayBannerThin('ALL YOUR NOTES:', '')
+        console.log(`PRO_KEY`.padEnd(11) + `NOTE_ID`.padEnd(12) + `TITLE`)
+        divider(50)
+
+        if (notes.length === 0) {
+            console.log('\n     No notes found')
+        }
+
+        for (const note of notes) {
+            console.log(`${note.proKeyword}`.padEnd(11) + `${note.id.slice(0, 8)}`.padEnd(12) + `${colors.cyan}${note.title}${colors.reset}`)
+        }
+
+        console.log('')
+        divider(50)
     }
 }

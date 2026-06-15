@@ -7,6 +7,7 @@ import { displayDeafultHeader } from '../src/helpers/defaultUI.js'
 import projectCommand from '../src/commands/projectCommand.js'
 import taskCommand from '../src/commands/taskCommand.js'
 import NoteCommand from '../src/commands/noteCommand.js'
+import { colors } from '../src/helpers/format.js'
 
 import * as logger from '../src/helpers/logger.js'
 
@@ -30,6 +31,7 @@ function main(cmd) {
         
         switch(cmd) {
             case 'project':
+            case 'pro':
                 projectCommand(args, manager, FILE)
                 break;
             case 'task':
@@ -43,7 +45,7 @@ function main(cmd) {
                 displayHelp()
                 break;
             default:
-                console.log(`   Invalid command: <${cmd}>\n`)
+                console.error(`   ${colors.red}Invalid command: <${cmd}>${colors.reset}\n`)
                 displayHelp()
                 break;
         }
