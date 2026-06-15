@@ -39,6 +39,7 @@ export default class StorageService {
                 const note = new Note(n.title)
                 note.id = n.id
                 note.proId = n.proId
+                note.proKeyword = n.proKeyword
                 note.createdAt = n.createdAt
                 project.notes.push(note)
             })
