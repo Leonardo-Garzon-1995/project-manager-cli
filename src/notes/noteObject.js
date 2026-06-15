@@ -7,13 +7,11 @@ export default class Note {
         this.title = title.trim()
         this.proId = null
         this.createdAt = generateTimestamp()
+        this.proKeyword = null
     }
 
     getPath() {
         return this.id
     }
 
-    isValidId() {
-        return this.id && this.id.startsWith('nte-') && this.id.length === 40
-    } 
 }
