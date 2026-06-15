@@ -55,10 +55,10 @@ pro <command> [options]
 ### Examples
 
 ```bash
-pro add-project      - prompts you to add a new project name, description, and keyword
-pro list-projects    - lists all projects 
-pro add-task         - prompts you to add a new task to a project
-pro list-tasks       - lists all tasks in a project
+pro project add             - prompts you to add a new project name, description, and keyword
+pro project list            - lists all projects 
+pro task add <pro-index>    - prompts you to add a new task to a project
+pro note list <pro-index>   - lists all notes in a project
 ```
 
 > Run `pro help` to see the full list of available commands and options.
@@ -74,11 +74,16 @@ project-manager-cli/
 ├── src/                            # Core application logic
 │   ├── projects/
 │   │   ├── project.js              # Project class with all the methods for managing projects
-│   │   ├── projects-manager.js     #  Main orchestrator class for managing projects and tasks
+│   │   ├── projects-manager.js     #  Orchestrator class for managing projects, tasks and notes
 │   │   └── task.js                 # Task class with all the methods for managing tasks
+│   │
+│   ├── prompt/                     # Centalizes prompting logic
+│   ├── commands/                   # Commands orchestrators
+│   ├── notes/                      # Centralizes all note handling logic
 │   ├── storage-service.js          # Manages saving and loading the projects and tasks 
 │   └── helpers/                    # Utility functions  
-├── data/     
+├── data/   
+│   ├── notes_data/                 # Contains all the note files
 │   └── projects.json               # Local data storage
 ├── package.json
 ├── README.md
