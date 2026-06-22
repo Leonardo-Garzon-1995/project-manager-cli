@@ -3,6 +3,7 @@ import path from 'path'
 import Note from './noteObject.js'
 import { validateNoteId } from '../helpers/validation.js'
 import { fileURLToPath } from 'node:url'
+import {NoteNotFoundError} from '../errors.js'
 
 const __filename  = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -31,8 +32,7 @@ function readNoteFile(noteId) {
     const fullPath = path.join(NOTES_DATA_DIR, noteId)
 
     if (!fs.existsSync(fullPath)) {
-        console.error('Note does not exist')
-        return
+        throw new NoteNotFoundError(noteId)
     }
 
     const content = fs.readFileSync(fullPath, 'utf-8')
@@ -45,8 +45,7 @@ function appendToNoteFile(noteId, text) {
 
     const fullPath = path.join(NOTES_DATA_DIR, noteId)
     if (!fs.existsSync(fullPath)) {
-        console.error('Note does not exist')
-        return
+        throw new NoteNotFoundError(noteId)
     }
 
     fs.appendFileSync(fullPath, text + '\n')
@@ -59,8 +58,7 @@ function deleteNoteFile(noteId) {
 
     const fullPath = path.join(NOTES_DATA_DIR, noteId)
     if (!fs.existsSync(fullPath)) {
-        console.error('Note does not exist')
-        return
+        throw new NoteNotFoundError(noteId)
     }
     
     fs.unlinkSync(fullPath)
@@ -73,12 +71,15 @@ function emptyNotesDir() {
         return
     }
 
-    for (const entry of fs.readdirSync(NOTES_DATA_DIR)) {
-        const entryPath = path.join(NOTES_DATA_DIR, entry)
+        fs.rmSync(NOTES_DATA_DIR, {recursive: true, force: true})
 
-        fs.rmSync(entryPath, {recursive: true, force: true})
-    }
+}
 
+function createNoteFromFile(filePath, noteObject) {
+    const sourcePath = path.join(process.cwd(), filePath)
+    const noteId = noteObject.getPath()
+    const noteFilePath = path.join(NOTES_DATA_DIR, noteId)
+    fs.copyFileSync(sourcePath, noteFilePath )
 }
 
 export {
@@ -86,6 +87,7 @@ export {
     readNoteFile,
     deleteNoteFile,
     emptyNotesDir,
-    appendToNoteFile
+    appendToNoteFile,
+    createNoteFromFile
 }
 
