@@ -3,9 +3,10 @@ import StorageService from '../storage-service.js'
 import {colors, displayBanner, displayBannerThin, buildMiniBar, divider} from '../helpers/format.js'
 import { isValidDate } from '../helpers/dates.js'
 import { filterTasksByDate, filterNotes } from '../helpers/filters.js'
-import { createNoteFile, readNoteFile, deleteNoteFile, appendToNoteFile } from '../notes/noteFile.js'
+import { createNoteFile, readNoteFile, deleteNoteFile, appendToNoteFile, createNoteFromFile, emptyNotesDir } from '../notes/noteFile.js'
 import  * as prompter from '../prompt/prompter.js'
 import { validateProjectIndex, validateTaskIndex, validateNoteIndex } from '../helpers/validation.js'
+import { ValidationError, NoteNotFoundError} from '../errors.js'
 import * as logger from '../helpers/logger.js'
 
 
@@ -29,7 +30,7 @@ export default class ProjectsManager {
             logger.info(`New Project: ${title}`)
 
         } catch (error) {
-            logger.error(error.stack)
+            logger.error(error)
             console.error(error.message )
         }
     }
@@ -225,6 +226,10 @@ export default class ProjectsManager {
         try {
             validateProjectIndex(projectIndex, this.projects)
 
+            for (const note of (this.projects[projectIndex - 1].notes)) {
+                deleteNoteFile(note.id)
+            }
+
             const filtered = this.projects.filter((_, i) => i !== projectIndex - 1)
             this.projects = filtered
 
@@ -244,14 +249,19 @@ export default class ProjectsManager {
             type: 'string'
         })
 
-        if (approval.trim() === 'y' || approval.trim() === 'Y' || approval.trim() === 'yes') {
+        if (approval.trim().toLowerCase() === 'y' || approval.trim().toLowerCase() === 'yes') {
             try {
-            this.projects = []
-            StorageService.save(filePath, this.projects)
+                if (this.projects.length === 0) {
+                    throw new Error('No projects found')
+                }
+                emptyNotesDir()
+                
+                this.projects = []
+                StorageService.save(filePath, this.projects)
 
-            console.log(`\n${colors.green}\u2713 AllProjects have been cleared successfully!${colors.reset}`)
+                console.log(`\n${colors.green}\u2713 AllProjects have been cleared successfully!${colors.reset}`)
             } catch (error) {
-                console.log(error.message )
+                console.log(error.message)
             }
         }
     }
@@ -445,7 +455,7 @@ export default class ProjectsManager {
 
             console.log(content)
         } catch (error) {
-            logger.error(error.stack)
+            logger.error(error)
             console.error(error.message)
         }
     }
@@ -465,7 +475,7 @@ export default class ProjectsManager {
 
             console.log(`   ${colors.green}\u2713 Note has been deleted successfully!${colors.reset}`)
         } catch(error) {
-            logger.error(error.stack) 
+            logger.error(error) 
             console.error(error.message)
         }
     }
@@ -521,5 +531,20 @@ export default class ProjectsManager {
 
         console.log('')
         divider(50)
+    }
+
+    createNoteFromFileToProject(filePath, projectIndex, source) {
+        validateProjectIndex(projectIndex, this.projects)
+
+        const project = this.projects[projectIndex - 1]
+
+        project.addNote(source)
+
+        const newNote = project.notes[project.notes.length - 1]
+        newNote.proKeyword = project.keyword
+
+        createNoteFromFile(source, newNote)
+
+        StorageService.save(filePath, this.projects)
     }
 }

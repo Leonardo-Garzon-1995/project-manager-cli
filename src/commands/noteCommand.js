@@ -2,7 +2,7 @@ import { colors } from '../helpers/format.js'
 const validOptions = [
     'add', '-a', 'list', '-l', 'delete',
     '-d', 'view', '-v', 'append', '-ap',
-    'clear', 'all'
+    'clear', 'all', 'file'
 ]
 
 export default function NoteCommand(argv, mgr, filePath) {
@@ -41,5 +41,7 @@ export default function NoteCommand(argv, mgr, filePath) {
         case 'all':
             mgr.filterAllNotes()
             break
+        case 'file':
+            mgr.createNoteFromFileToProject(filePath, argv[1], argv[2])
     }
 }

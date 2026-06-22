@@ -1,11 +1,11 @@
-
+import { InvalidIndexError, InvalidNoteIdError } from '../errors.js'
 function validateProjectIndex(projectIndex, projects) {
     if (!projectIndex || Number.isNaN(parseInt(projectIndex))) {
-        throw new Error('   The project index must be a number')
+        throw new InvalidIndexError('   The project index must be a number')
     }
 
     if (!projects || !projects[projectIndex - 1]) {
-        throw new Error(`   Project at index ${projectIndex} does not exist.`)
+        throw new InvalidIndexError(`   Project at index ${projectIndex} does not exist.`)
     }
 }
 
@@ -13,10 +13,10 @@ function validateTaskIndex(taskIndex, projectIndex, projects) {
     validateProjectIndex(projectIndex, projects)
 
     if (!taskIndex || Number.isNaN(parseInt(taskIndex))) {
-        throw new Error(' The task index must be a number')
+        throw new InvalidIndexError(' The task index must be a number')
     }
     if (!projects[projectIndex - 1].tasks[taskIndex - 1]) {
-        throw  new Error(`  Task at index ${taskIndex} does not exist.`)
+        throw  new InvalidIndexError(`  Task at index ${taskIndex} does not exist.`)
     }
 }
 
@@ -24,11 +24,11 @@ function validateNoteIndex(noteIndex, projectIndex, projects) {
     validateProjectIndex(projectIndex, projects)
 
     if (!noteIndex || Number.isNaN(parseInt(noteIndex))) {
-        throw new Error('   The note index must be a number')
+        throw new InvalidIndexError('   The note index must be a number')
     }
     
     if (!projects[projectIndex -1].notes[noteIndex -1]) {
-        throw new Error(`   Note at index ${noteIndex} does not exist.`)
+        throw new InvalidIndexError(`   Note at index ${noteIndex} does not exist.`)
     }
 }
 function isValidNoteId(noteId) {
@@ -37,7 +37,7 @@ function isValidNoteId(noteId) {
 
 function validateNoteId(noteId) {
     if (!isValidNoteId(noteId)) {
-        throw new Error('Invalid note id')
+        throw new InvalidNoteIdError(noteId)
     }
 }
 
