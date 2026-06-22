@@ -33,6 +33,7 @@ export default function displayHelp() {
     console.log(`           ${colors.cyan}append, -ap ${colors.gray}<pro-index> <note-index>${colors.reset}`.padEnd(67, " ") + `Append a new line to an existing note`);   
     console.log(`           ${colors.cyan}view, -v ${colors.gray}<pro-index> <note-index>${colors.reset}`.padEnd(67, " ") + `View a note by index`);
     console.log(`           ${colors.cyan}delete, -d ${colors.gray}<pro-index> <note-index>${colors.reset}`.padEnd(67, " ") + `Delete a note by index`);
+    console.log(`           ${colors.cyan}file ${colors.gray}<pro-index> <file-path>${colors.reset}`.padEnd(67, " ") + `Copy an existing file as a new note`);
     console.log(`           ${colors.cyan}all${colors.reset}`.padEnd(62, " ") + `Show all notes in all projects`)
     console.log(`           ${colors.cyan}clear ${colors.gray}<pro-index>${colors.reset}`.padEnd(67, " ") + `Clear all notes by project index`);
     console.log("")

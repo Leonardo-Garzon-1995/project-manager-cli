@@ -18,6 +18,17 @@ class InvalidNoteIdError extends AppError {
     }
 }
 
+class NoteNotFoundError extends AppError {
+    constructor(noteId) {
+        super(`Note not found: ${noteId.slice(0, 8)}...`)
+
+        this.noteId = noteId
+        this.code = 'NOTE_NOT_FOUND' 
+    }
+    
+    
+}
+
 class ValidationError extends AppError{
     constructor(message="Validation Error") {
         super(message)
@@ -37,5 +48,6 @@ class InvalidIndexError extends AppError {
 export {
     InvalidNoteIdError,
     ValidationError,
-    InvalidIndexError
+    InvalidIndexError,
+    NoteNotFoundError
 }
