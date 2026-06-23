@@ -293,10 +293,74 @@ export default class ProjectsManager {
             console.log(`${colors.cyan}⚐ Description:${colors.reset} ${project.description}\n`)
 
         } catch (error) {
-            logger.error(error.stack)
+            logger.error(error)
             console.error(error.message )
         }
         
+    }
+
+    async updateProjectTitle(filePath, projectIndex) {
+        try {
+            validateProjectIndex(projectIndex, this.projects)
+
+            let newTitle = await prompter.individualPrompt({
+                message: `  ${colors.cyan} ♦ Enter new title: ${colors.reset}`,
+                type: 'string'
+            })
+
+            const project = this.projects[projectIndex - 1]
+
+            project.title = newTitle.trim()
+
+            StorageService.save(filePath, this.projects)
+
+            console.log(`\n${colors.green}\u2713 Project title updated susccesfully!${colors.reset}`)
+        } catch (error) {
+            logger.error(error)
+            console.log(error.message)
+        }
+    }
+
+    async updateProjectDescription(filePath, projectIndex) {
+        try {
+            validateProjectIndex(projectIndex, this.projects)
+
+            let newDescription = await prompter.individualPrompt({
+                message: `  ${colors.cyan} ♦ Enter new description: ${colors.reset}`,
+                type: 'string'
+            })
+
+            const project = this.projects[projectIndex - 1]
+            project.description = newDescription.trim()
+
+            StorageService.save(filePath, this.projects)
+
+            console.log(`\n${colors.green}\u2713 Project title updated susccesfully!${colors.reset}`)
+        } catch (error) {
+            logger.error(error)
+            console.error(error.message)
+        }
+    }
+
+    async updateProjectKeyword(filePath, projectIndex) {
+        try {
+            validateProjectIndex(projectIndex, this.projects)
+
+            let newKeyword = await prompter.individualPrompt({
+                message: `  ${colors.cyan} ♦ Enter new keyword: ${colors.reset}`
+            })
+
+            const project = this.projects[projectIndex - 1] 
+            project.keyword = newKeyword.toUpperCase().trim()
+
+            StorageService.save(filePath, this.projects)
+
+            console.log(`\n${colors.green}\u2713 Project title updated susccesfully!${colors.reset}`)
+
+        } catch (error) {
+            logger.error(error)
+            console.error(error.message)
+        }
     }
 
     displayDailyTasks() {
@@ -450,10 +514,14 @@ export default class ProjectsManager {
             const project = this.projects[projectIndex - 1]
             const note = project.notes[noteIndex - 1]
             const content = readNoteFile(note.id)
+            const header = `\n${colors.cyan}---[ ${note.title} ]---${colors.reset}\n`
+            const headerLen = header.length - 10
 
-            console.log(`\n${colors.cyan}---[ ${note.title} ]---${colors.reset}\n`)
+            console.log(header)
 
             console.log(content)
+
+            divider(headerLen, colors.cyan)
         } catch (error) {
             logger.error(error)
             console.error(error.message)

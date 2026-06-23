@@ -28,8 +28,12 @@ const colors = {
     reset: "\x1b[0m",
 };
 
-function divider(num) {
-    process.stdout.write('-'.repeat(num) + '\n') // '─'
+function divider(num, color = colors.reset) {
+    process.stdout.write(color + '-'.repeat(num) + colors.reset + '\n') 
+}
+
+function thickDivider(num, color = colors.reset) {
+    process.stdout.write(color + '='.repeat(num) + colors.reset + '\n') 
 }
 
 function displayBanner(title, text, color = colors.cyan) {
@@ -52,6 +56,10 @@ function displayBannerThin(text, secondText, color = colors.cyan) {
 }
 
 /** 
+ * Builds a mini bar
+ * 
+ * Default format:
+ *   ▫▫▫▫▫
  * 
  * @param {number} value - value for the filled portion of the bar 
  * @param {number} max - max value accepted 
