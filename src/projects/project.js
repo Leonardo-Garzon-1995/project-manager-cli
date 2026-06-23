@@ -7,8 +7,8 @@ import Id from '../helpers/id_system.js'
 export default class Project {
     constructor(title, description, keyword) {
         this.id = Id.generateProId()
-        this.title = title.trim()
-        this.keyword = keyword? keyword.toUpperCase().trim() : title.slice(0, 5).toUpperCase().trim()
+        this.title = title.trim() 
+        this.keyword = keyword ? keyword.toUpperCase().trim() : title.slice(0, 5).toUpperCase().trim()
         this.description = description.trim()
         this.createdAt = generateTimestamp()
         this.dueDate = null
@@ -129,6 +129,4 @@ export default class Project {
         this.notes = filtered
         return this.notes
     }
-
 }
-

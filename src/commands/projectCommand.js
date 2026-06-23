@@ -2,8 +2,20 @@ import { colors } from '../helpers/format.js'
 const validOptions = [
     'add', '-a', 'list', '-l', 'delete',
     '-d', 'view', '-v', 'important', '-i',
-    'clear'
+    'clear', 'update', '-u'
 ]
+
+function updateProjectProperties(filePath, property, index, mgr) {
+    if (property === 'title') {
+        mgr.updateProjectTitle(filePath, index)
+    } else if (property === 'description') {
+        mgr.updateProjectDescription(filePath, index)
+    } else if (property === 'keyword') {
+        mgr.updateProjectKeyword(filePath, index)
+    } else {
+        return
+    }
+}
 
 
 export default function projectCommand(argv, mgr, filePath) {
@@ -39,6 +51,10 @@ export default function projectCommand(argv, mgr, filePath) {
             break
         case 'clear':
             mgr.clearAllProjects(filePath)
+            break
+        case 'update':
+        case '-u':
+            updateProjectProperties(filePath, argv[1], argv[2], mgr)
             break
     }
 }
