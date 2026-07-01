@@ -601,12 +601,17 @@ export default class ProjectsManager {
         divider(50)
     }
 
-    createNoteFromFileToProject(filePath, projectIndex, source) {
+    async createNoteFromFileToProject(filePath, projectIndex, source) {
         validateProjectIndex(projectIndex, this.projects)
 
         const project = this.projects[projectIndex - 1]
 
-        project.addNote(source)
+        let title =  await prompter.individualPrompt({
+            message: `\n    ${colors.cyan}♦ Enter note title: ${colors.reset}`,
+            type: 'string'
+        })
+
+        project.addNote(title)
 
         const newNote = project.notes[project.notes.length - 1]
         newNote.proKeyword = project.keyword
@@ -614,5 +619,7 @@ export default class ProjectsManager {
         createNoteFromFile(source, newNote)
 
         StorageService.save(filePath, this.projects)
+        console.log("    │")
+        console.log(`    ${colors.green}\u2713 Note created successfully!${colors.reset}`)
     }
 }

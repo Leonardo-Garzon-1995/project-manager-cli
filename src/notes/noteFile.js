@@ -67,12 +67,10 @@ function deleteNoteFile(noteId) {
 
 function emptyNotesDir() {
     if (!fs.existsSync(NOTES_DATA_DIR)) {
-        console.error('No notes to delete')
         return
     }
 
-        fs.rmSync(NOTES_DATA_DIR, {recursive: true, force: true})
-
+    fs.rmSync(NOTES_DATA_DIR, {recursive: true, force: true})
 }
 
 function createNoteFromFile(filePath, noteObject) {
