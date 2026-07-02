@@ -3,8 +3,17 @@ import StorageService from '../storage-service.js'
 import {colors, displayBanner, displayBannerThin, buildMiniBar, divider} from '../helpers/format.js'
 import { isValidDate } from '../helpers/dates.js'
 import { filterTasksByDate, filterNotes } from '../helpers/filters.js'
-import { createNoteFile, readNoteFile, deleteNoteFile, appendToNoteFile, createNoteFromFile, emptyNotesDir } from '../notes/noteFile.js'
+import { 
+    createNoteFile, 
+    readNoteFile, 
+    deleteNoteFile, 
+    appendToNoteFile, 
+    createNoteFromFile, 
+    emptyNotesDir, 
+    getNotePath 
+} from '../notes/noteFile.js'
 import  * as prompter from '../prompt/prompter.js'
+import { startEditor } from '../editor_mode/core/editor.js'
 import { validateProjectIndex, validateTaskIndex, validateNoteIndex } from '../helpers/validation.js'
 import { ValidationError, NoteNotFoundError} from '../errors.js'
 import * as logger from '../helpers/logger.js'
@@ -621,5 +630,16 @@ export default class ProjectsManager {
         StorageService.save(filePath, this.projects)
         console.log("    │")
         console.log(`    ${colors.green}\u2713 Note created successfully!${colors.reset}`)
+    }
+
+    editNote(projectIndex, noteIndex) {
+        validateProjectIndex(projectIndex, this.projects)
+        validateNoteIndex(noteIndex, projectIndex, this.projects)
+
+        const noteId = this.projects[projectIndex - 1].notes[noteIndex - 1].id
+
+        const notePath = getNotePath(noteId)
+
+        startEditor(notePath)
     }
 }
