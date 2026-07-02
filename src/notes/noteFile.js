@@ -40,6 +40,12 @@ function readNoteFile(noteId) {
     return content
 }
 
+function getNotePath(noteId) {
+    validateNoteId(noteId)
+
+    return path.join(NOTES_DATA_DIR, noteId)
+}
+
 function appendToNoteFile(noteId, text) {
     validateNoteId(noteId)
 
@@ -83,6 +89,7 @@ function createNoteFromFile(filePath, noteObject) {
 export {
     createNoteFile,
     readNoteFile,
+    getNotePath,
     deleteNoteFile,
     emptyNotesDir,
     appendToNoteFile,
