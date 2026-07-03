@@ -24,7 +24,8 @@ export default class ProjectsManager {
         this.projects = StorageService.load(filePath)
     }
 
-    // Project related methods
+    // <------------- PROJECT RELATED METHODS ------------->
+
     async addProject(filePath) {
         try {
             const { title, description, keyword } = await prompter.addProjectPrompt()
@@ -44,172 +45,6 @@ export default class ProjectsManager {
         }
     }
 
-    async addTaskToProjectByIndex(filePath, projectIndex) {
-        try {
-            validateProjectIndex(projectIndex, this.projects)
-
-            const project = this.projects[projectIndex - 1]
-            
-            const { title, dueDate } = await prompter.addTaskPrompt(project)
-
-            project.addTask({title, dueDate})
-
-            StorageService.save(filePath, this.projects)
-            console.log(`   ${colors.green}\u2713 Task added successfully!${colors.reset}`)
-            console.log('')
-            logger.info(`New task added: ${title}`)
-
-        } catch (error) {
-            logger.error(error.stack)
-            console.error(error.message )
-        }
-
-    }
-    
-    toggleProjectImportance(filePath, projectIndex) {
-        try {
-            validateProjectIndex(projectIndex, this.projects)
-
-            this.projects[projectIndex -1].toggleHighImportance()
-            StorageService.save(filePath, this.projects)
-            
-            if (this.projects[projectIndex -1].highImportance) {
-                console.log(`\n${colors.green}\u2713 Project at index ${projectIndex} has been marked as high importance.${colors.reset}`)
-            } else {
-                console.log(`\n${colors.green}\u2713 Project at index ${projectIndex} has been marked as low importance.${colors.reset}`)
-            }
-        } catch (error) {
-            logger.error(error.stack);
-            console.error(error.message)
-        }
-    }
-
-    listCompletedTasksByIndex(projectIndex) {
-
-        try {
-            validateProjectIndex(projectIndex, this.projects)
-
-            displayBanner("COMPLETED TASKS FOR:", `${projectIndex} - ${this.projects[projectIndex - 1].title}`, colors.brightgreen)
-            this.projects[projectIndex -1].filterTasksByCompleted()
-            console.log("=".repeat(42) + '\n')
-        } catch (error) {
-            logger.error(error.stack)
-            console.error(error.message)
-        }
-    }
-
-    listPendingTasksByIndex(projectIndex) {
-        try {
-            validateProjectIndex(projectIndex, this.projects)
-
-            displayBanner("PENDING TASKS FOR:", `${projectIndex} - ${this.projects[projectIndex - 1].title}`, colors.yellow)
-            this.projects[projectIndex -1].filterTasksByPending()
-            console.log("=".repeat(42) + '\n')
-        } catch (error) {
-            logger.error(error.stack)
-            console.error(error.message)
-        }
-    }
-
-    // Tasks related methods
-    listTasksByProjectIndex(projectIndex) {
-
-        try{
-            validateProjectIndex(projectIndex, this.projects)
-
-            const proName = `${projectIndex} - ${this.projects[projectIndex - 1].title}`
-            displayBanner("TASKS FOR:", proName)
-
-            if (this.projects[projectIndex - 1].tasks.length === 0) {
-                console.log(`This project has no tasks.`)
-                console.log("")
-                console.log("=".repeat(42) + '\n')
-                return
-            }
-            this.projects[projectIndex - 1].listTasks()
-            console.log("")
-            console.log("=".repeat(42) + '\n')
-        } catch (error) {
-            logger.error(error.stack)
-            console.error(error.message)
-        }
-    }
-
-    deleteTask(filePath, projectIndex, taskIndex) {
-
-        try {
-            validateTaskIndex(taskIndex, projectIndex, this.projects)
-
-            const updatedtasks = this.projects[projectIndex - 1].deleteTaskByIndex(taskIndex - 1)
-            
-            this.projects[projectIndex -1].tasks = updatedtasks
-            
-            StorageService.save(filePath, this.projects)
-            console.log(`\n${colors.green}\u2713 Task deleted successfully!${colors.reset}`)
-
-        } catch (error) {
-            logger.error(error.stack)
-            console.error(error.message)
-        }
-    }
-
-    markTaskAsCompleted(filePath, projectIndex, taskIndex) {
-        try {
-            validateTaskIndex(taskIndex, projectIndex, this.projects)
-            if (this.projects[projectIndex -1].tasks[taskIndex -1].completed) {
-                throw new Error(`   Task at index ${taskIndex} is already completed.`)
-            }
-            this.projects[projectIndex - 1].setTaskAsCompletedByIndex(taskIndex)
-            StorageService.save(filePath, this.projects)
-
-            console.log("")
-            console.log(`${colors.brightgreen}\u2713 Task ${taskIndex} has been marked as completed!${colors.reset}`)
-        } catch (error) {
-            logger.error(error.stack)
-            console.error(error.message)
-        }
-    }
-
-    async clearTasksByProjectIndex(filePath, projectIndex) {
-
-        try {
-            validateProjectIndex(projectIndex, this.projects)
-
-            if (this.projects[projectIndex -1].tasks.length === 0) {
-                throw new Error(`   Project at index ${projectIndex} has no tasks.`)
-            }
-            let approval = await prompter.individualPrompt({
-                message: "Are you sure you wnat to clear all the tasks for this project? (Y/n): ",
-                type: 'string'
-            })
-
-            if (approval.trim() === 'y' || approval.trim() === 'Y' || approval.trim() === 'yes') {
-                this.projects[projectIndex - 1].clearAllTasks()
-                StorageService.save(filePath, this.projects)
-
-                console.log("")
-                console.log(`${colors.brightgreen}\u2713 Tasks for project ${projectIndex} have been cleared successfully!${colors.reset}`)
-            }
-            
-        } catch (error) {
-            logger.error(error.stack)
-            console.error(error.message)
-        }
-        
-    }
-
-    viewTaskByIndex(projectIndex, taskIndex) {
-        try {
-            validateTaskIndex(taskIndex, projectIndex, this.projects)
-
-            this.projects[projectIndex - 1].viewTaskByIndex(taskIndex)
-        } catch (error) {
-            logger.error(error.stack)
-            console.error(error.message)
-        }
-    }
-
-    // manager direct related methods
     listProjects() {
         displayBanner("YOUR PROJECTS:", "")
 
@@ -372,6 +207,173 @@ export default class ProjectsManager {
         }
     }
 
+    toggleProjectImportance(filePath, projectIndex) {
+        try {
+            validateProjectIndex(projectIndex, this.projects)
+
+            this.projects[projectIndex -1].toggleHighImportance()
+            StorageService.save(filePath, this.projects)
+            
+            if (this.projects[projectIndex -1].highImportance) {
+                console.log(`\n${colors.green}\u2713 Project at index ${projectIndex} has been marked as high importance.${colors.reset}`)
+            } else {
+                console.log(`\n${colors.green}\u2713 Project at index ${projectIndex} has been marked as low importance.${colors.reset}`)
+            }
+        } catch (error) {
+            logger.error(error.stack);
+            console.error(error.message)
+        }
+    }
+
+    listCompletedTasksByIndex(projectIndex) {
+
+        try {
+            validateProjectIndex(projectIndex, this.projects)
+
+            displayBanner("COMPLETED TASKS FOR:", `${projectIndex} - ${this.projects[projectIndex - 1].title}`, colors.brightgreen)
+            this.projects[projectIndex -1].filterTasksByCompleted()
+            console.log("=".repeat(42) + '\n')
+        } catch (error) {
+            logger.error(error.stack)
+            console.error(error.message)
+        }
+    }
+
+    listPendingTasksByIndex(projectIndex) {
+        try {
+            validateProjectIndex(projectIndex, this.projects)
+
+            displayBanner("PENDING TASKS FOR:", `${projectIndex} - ${this.projects[projectIndex - 1].title}`, colors.yellow)
+            this.projects[projectIndex -1].filterTasksByPending()
+            console.log("=".repeat(42) + '\n')
+        } catch (error) {
+            logger.error(error.stack)
+            console.error(error.message)
+        }
+    }
+
+    // <------------- PROJECT RELATED METHODS ------------->
+
+    async addTaskToProjectByIndex(filePath, projectIndex) {
+        try {
+            validateProjectIndex(projectIndex, this.projects)
+
+            const project = this.projects[projectIndex - 1]
+            
+            const { title, dueDate } = await prompter.addTaskPrompt(project)
+
+            project.addTask({title, dueDate})
+
+            StorageService.save(filePath, this.projects)
+            console.log(`   ${colors.green}\u2713 Task added successfully!${colors.reset}`)
+            console.log('')
+            logger.info(`New task added: ${title}`)
+
+        } catch (error) {
+            logger.error(error.stack)
+            console.error(error.message )
+        }
+
+    }
+
+    listTasksByProjectIndex(projectIndex) {
+
+        try{
+            validateProjectIndex(projectIndex, this.projects)
+
+            const proName = `${projectIndex} - ${this.projects[projectIndex - 1].title}`
+            displayBanner("TASKS FOR:", proName)
+
+            if (this.projects[projectIndex - 1].tasks.length === 0) {
+                console.log(`This project has no tasks.`)
+                console.log("")
+                console.log("=".repeat(42) + '\n')
+                return
+            }
+            this.projects[projectIndex - 1].listTasks()
+            console.log("")
+            console.log("=".repeat(42) + '\n')
+        } catch (error) {
+            logger.error(error.stack)
+            console.error(error.message)
+        }
+    }
+
+    deleteTask(filePath, projectIndex, taskIndex) {
+
+        try {
+            validateTaskIndex(taskIndex, projectIndex, this.projects)
+
+            const updatedtasks = this.projects[projectIndex - 1].deleteTaskByIndex(taskIndex - 1)
+            
+            this.projects[projectIndex -1].tasks = updatedtasks
+            
+            StorageService.save(filePath, this.projects)
+            console.log(`\n${colors.green}\u2713 Task deleted successfully!${colors.reset}`)
+
+        } catch (error) {
+            logger.error(error.stack)
+            console.error(error.message)
+        }
+    }
+
+    markTaskAsCompleted(filePath, projectIndex, taskIndex) {
+        try {
+            validateTaskIndex(taskIndex, projectIndex, this.projects)
+            if (this.projects[projectIndex -1].tasks[taskIndex -1].completed) {
+                throw new Error(`   Task at index ${taskIndex} is already completed.`)
+            }
+            this.projects[projectIndex - 1].setTaskAsCompletedByIndex(taskIndex)
+            StorageService.save(filePath, this.projects)
+
+            console.log("")
+            console.log(`${colors.brightgreen}\u2713 Task ${taskIndex} has been marked as completed!${colors.reset}`)
+        } catch (error) {
+            logger.error(error.stack)
+            console.error(error.message)
+        }
+    }
+
+    async clearTasksByProjectIndex(filePath, projectIndex) {
+
+        try {
+            validateProjectIndex(projectIndex, this.projects)
+
+            if (this.projects[projectIndex -1].tasks.length === 0) {
+                throw new Error(`   Project at index ${projectIndex} has no tasks.`)
+            }
+            let approval = await prompter.individualPrompt({
+                message: "Are you sure you wnat to clear all the tasks for this project? (Y/n): ",
+                type: 'string'
+            })
+
+            if (approval.trim() === 'y' || approval.trim() === 'Y' || approval.trim() === 'yes') {
+                this.projects[projectIndex - 1].clearAllTasks()
+                StorageService.save(filePath, this.projects)
+
+                console.log("")
+                console.log(`${colors.brightgreen}\u2713 Tasks for project ${projectIndex} have been cleared successfully!${colors.reset}`)
+            }
+            
+        } catch (error) {
+            logger.error(error.stack)
+            console.error(error.message)
+        }
+        
+    }
+
+    viewTaskByIndex(projectIndex, taskIndex) {
+        try {
+            validateTaskIndex(taskIndex, projectIndex, this.projects)
+
+            this.projects[projectIndex - 1].viewTaskByIndex(taskIndex)
+        } catch (error) {
+            logger.error(error.stack)
+            console.error(error.message)
+        }
+    }
+    
+
     displayDailyTasks() {
         const currentDate = new Date().toLocaleDateString()
         const todayTasks = filterTasksByDate(this.projects, currentDate)
@@ -436,6 +438,8 @@ export default class ProjectsManager {
         divider(50)
         console.log('')
     }
+
+    // <------------- NOTE RELATED METHODS -------------> 
 
     async createNoteToProject(filePath, projectIndex) {
 
@@ -636,10 +640,10 @@ export default class ProjectsManager {
         validateProjectIndex(projectIndex, this.projects)
         validateNoteIndex(noteIndex, projectIndex, this.projects)
 
-        const noteId = this.projects[projectIndex - 1].notes[noteIndex - 1].id
+        const note = this.projects[projectIndex - 1].notes[noteIndex - 1]
 
-        const notePath = getNotePath(noteId)
+        const notePath = getNotePath(note.id)
 
-        startEditor(notePath)
+        startEditor(notePath, note.title)
     }
 }

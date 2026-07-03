@@ -30,7 +30,7 @@ function quitEditor() {
     process.exit(0)
 }
 
-function startEditor(file='') {
+function startEditor(file='', noteTitle='') {
     try {
         enableRawMode()
         logger.info('Initialize editor mode')
@@ -40,7 +40,7 @@ function startEditor(file='') {
             openFile(state, filename)
         }
 
-        refreshScreen(state)
+        refreshScreen(state, noteTitle)
 
         onKeyPress(key => {
             if (key === KEYS.CTRL_C) {
@@ -57,7 +57,7 @@ function startEditor(file='') {
                 insertCharacter(key, state)
             }
 
-            refreshScreen(state)
+            refreshScreen(state, noteTitle)
         })
 
     } catch (error) {
