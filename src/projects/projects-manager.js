@@ -2,7 +2,7 @@ import Project from './project.js'
 import StorageService from '../storage-service.js'
 import {colors, displayBanner, displayBannerThin, buildMiniBar, divider} from '../helpers/format.js'
 import { isValidDate } from '../helpers/dates.js'
-import { filterTasksByDate, filterNotes } from '../helpers/filters.js'
+import { filterTasksByDate, filterNotes, getAllTasks } from '../helpers/filters.js'
 import { 
     createNoteFile, 
     readNoteFile, 
@@ -437,6 +437,21 @@ export default class ProjectsManager {
         console.log('')
         divider(50)
         console.log('')
+    }
+
+    displayAllTasks() {
+        const tasks = getAllTasks(this.projects)
+
+        displayBannerThin('ALL YOUR TASKS:', '')
+        console.log(`PRO_KEY`.padEnd(11) + `DUE_DATE`.padEnd(16) + `STATUS`.padEnd(12) + 'TASK')
+        divider(60)
+
+        for (const task of tasks) {
+            const status = task.completed ? `${colors.brightgreen}\u2713${colors.reset}` : `${colors.brightred}\u2717${colors.reset}`
+            console.log(`${task.proKeyword}`.padEnd(11) + `${task.dueDate}`.padEnd(16) + status.padStart(12).padEnd(21, ' ') + task.title)
+        }
+        console.log('')
+        divider(60)
     }
 
     // <------------- NOTE RELATED METHODS -------------> 
