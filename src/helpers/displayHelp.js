@@ -7,12 +7,13 @@ export default function displayHelp() {
     console.log(`   ${colors.green}COMMANDS:${colors.reset}`);
     console.log(`       Project Commands:`)
     console.log(`       ${colors.brightyellow}project, pro ${colors.gray}[flags/options] ${colors.reset}`)
-    console.log(`           ${colors.cyan}add, -a${colors.reset}`.padEnd(50, " ") + `Add a new project`);
-    console.log(`           ${colors.cyan}list, -l${colors.reset}`.padEnd(50, " ") + `List all projects`);
-    console.log(`           ${colors.cyan}view, -v ${colors.gray}<pro-index>${colors.reset}`.padEnd(55, " ") + `View a project by index`);
-    console.log(`           ${colors.cyan}important, -i ${colors.gray}<pro-index>${colors.reset}`.padEnd(55, " ") + `Toggle importance of projects by index`);
-    console.log(`           ${colors.cyan}delete, -d ${colors.gray}<pro-index>${colors.reset}`.padEnd(55, " ") + `Delete a project by index`);
-    console.log(`           ${colors.cyan}clear${colors.reset}`.padEnd(50, " ") + `Clear all projects`);
+    console.log(`           ${colors.cyan}add, -a${colors.reset}`.padEnd(55, " ") + `Add a new project`);
+    console.log(`           ${colors.cyan}list, -l${colors.reset}`.padEnd(55, " ") + `List all projects`);
+    console.log(`           ${colors.cyan}view, -v ${colors.gray}<pro-index>${colors.reset}`.padEnd(60, " ") + `View a project by index`);
+    console.log(`           ${colors.cyan}important, -i ${colors.gray}<pro-index>${colors.reset}`.padEnd(60, " ") + `Toggle importance of projects by index`);
+    console.log(`           ${colors.cyan}delete, -d ${colors.gray}<pro-index>${colors.reset}`.padEnd(60, " ") + `Delete a project by index`);
+    console.log(`           ${colors.cyan}update, -u ${colors.gray}<property> <pro-index>${colors.reset}`.padEnd(60, ' ') + 'update a property of a project')
+    console.log(`           ${colors.cyan}clear${colors.reset}`.padEnd(55, " ") + `Clear all projects`);
     console.log("")
     console.log(`       Task Commands:`)
     console.log(`       ${colors.brightyellow}task ${colors.gray}[flags/options] ${colors.reset}`)
@@ -23,6 +24,7 @@ export default function displayHelp() {
     console.log(`               ${colors.cyan}date -D ${colors.gray}<YYYY-MM-DD>${colors.reset}`.padEnd(67, " ") + 'List tasks by specific date')    
     console.log(`           ${colors.cyan}view, -v ${colors.gray}<pro-index> <task-index>${colors.reset}`.padEnd(67, " ") + `View a task by index`);
     console.log(`           ${colors.cyan}complete, -c ${colors.gray}<pro-index> <task-index>${colors.reset}`.padEnd(67, " ") + `Mark a task as completed by index`);
+    console.log(`           ${colors.cyan}all ${colors.reset}`.padEnd(62, ' ') + 'Display a table with all the existing tasks')
     console.log(`           ${colors.cyan}delete, -d ${colors.gray}<pro-index> <task-index>${colors.reset}`.padEnd(67, " ") + `Delete a task by index`);
     console.log(`           ${colors.cyan}clear ${colors.gray}<pro-index>${colors.reset}`.padEnd(67, " ") + `Clear all tasks by project index`);
     console.log("")
@@ -34,6 +36,7 @@ export default function displayHelp() {
     console.log(`           ${colors.cyan}view, -v ${colors.gray}<pro-index> <note-index>${colors.reset}`.padEnd(67, " ") + `View a note by index`);
     console.log(`           ${colors.cyan}delete, -d ${colors.gray}<pro-index> <note-index>${colors.reset}`.padEnd(67, " ") + `Delete a note by index`);
     console.log(`           ${colors.cyan}file ${colors.gray}<pro-index> <file-path>${colors.reset}`.padEnd(67, " ") + `Copy an existing file as a new note`);
+    console.log(`           ${colors.cyan}edit, -e ${colors.gray}<pro-index> <note-index>${colors.reset}`.padEnd(67,' ') + `Start editor mode to edit a note from the terminal`)
     console.log(`           ${colors.cyan}all${colors.reset}`.padEnd(62, " ") + `Show all notes in all projects`)
     console.log(`           ${colors.cyan}clear ${colors.gray}<pro-index>${colors.reset}`.padEnd(67, " ") + `Clear all notes by project index`);
     console.log("")

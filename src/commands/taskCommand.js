@@ -2,7 +2,7 @@ import { colors } from '../helpers/format.js'
 const validOptions = [
     'add', '-a', 'list', '-l', 'delete',
     '-d', 'view', '-v', 'complete', '-c',
-    'clear'
+    'clear', 'all'
 ]
 
 export default function taskCommand(argv, mgr, filePath) {
@@ -44,6 +44,9 @@ export default function taskCommand(argv, mgr, filePath) {
         case '-v':
             mgr.viewTaskByIndex(argv[1], argv[2])
             break;
+        case 'all':
+            mgr.displayAllTasks()
+            break
         case 'clear':
             mgr.clearTasksByProjectIndex(filePath, argv[1])
             break
