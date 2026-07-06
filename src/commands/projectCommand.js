@@ -1,4 +1,5 @@
 import { colors } from '../helpers/format.js'
+import { ValidationError } from '../errors.js'
 const validOptions = [
     'add', '-a', 'list', '-l', 'delete',
     '-d', 'view', '-v', 'important', '-i',
@@ -6,6 +7,9 @@ const validOptions = [
 ]
 
 function updateProjectProperties(filePath, property, index, mgr) {
+    if (!property) {
+        throw new ValidationError('   Property is missing')
+    }
     if (property === 'title') {
         mgr.updateProjectTitle(filePath, index)
     } else if (property === 'description') {
@@ -13,7 +17,7 @@ function updateProjectProperties(filePath, property, index, mgr) {
     } else if (property === 'keyword') {
         mgr.updateProjectKeyword(filePath, index)
     } else {
-        return
+        throw new ValidationError(`   '${property}' is not a property of project`)
     }
 }
 
