@@ -446,6 +446,10 @@ export default class ProjectsManager {
         console.log(`PRO_KEY`.padEnd(11) + `DUE_DATE`.padEnd(16) + `STATUS`.padEnd(12) + 'TASK')
         divider(60)
 
+        if (tasks.length === 0) {
+            console.log('\nNo tasks found')
+        }
+
         for (const task of tasks) {
             const status = task.completed ? `${colors.brightgreen}\u2713${colors.reset}` : `${colors.brightred}\u2717${colors.reset}`
             console.log(`${task.proKeyword}`.padEnd(11) + `${task.dueDate}`.padEnd(16) + status.padStart(12).padEnd(21, ' ') + task.title)
