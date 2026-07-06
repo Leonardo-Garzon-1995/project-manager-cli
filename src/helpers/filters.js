@@ -1,7 +1,6 @@
 
 function filterTasksByDate(projects, date) {
-    const projectsWithTasks = projects.filter(p => p.tasks.length > 0)
-    const tasks = []
+    const tasks = getAllTasks(projects)
 
     let parsedDate 
 
@@ -12,15 +11,28 @@ function filterTasksByDate(projects, date) {
         parsedDate = new Date(date).toLocaleDateString()
     }
 
+    const filterdbyDate = tasks.filter(t => t.dueDate === parsedDate)
+
+    return filterdbyDate.length > 0 ? filterdbyDate : []
+}
+
+function getAllTasks(projects) {
+    if (!projects || projects.length === 0) {
+        return
+    }
+    const projectsWithTasks = projects.filter(p => p.tasks.length > 0)
+    if (projectsWithTasks.length === 0) {
+        return 
+    }
+    const tasks = []
+
     for (let i = 0; i < projectsWithTasks.length; i++) {
         for (let j = 0; j < projectsWithTasks[i].tasks.length; j++) {
             tasks.push(projectsWithTasks[i].tasks[j])
         }
     }
 
-    const filterdbyDate = tasks.filter(t => t.dueDate === parsedDate)
-
-    return filterdbyDate.length > 0 ? filterdbyDate : []
+    return tasks
 }
 
 function filterNotes(projects, callback) {
@@ -45,5 +57,6 @@ function filterNotes(projects, callback) {
 
 export {
     filterTasksByDate,
-    filterNotes
+    filterNotes,
+    getAllTasks
 }
