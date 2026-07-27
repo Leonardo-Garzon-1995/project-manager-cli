@@ -3,6 +3,8 @@ import StorageService from '../storage-service.js'
 import {colors, displayBanner, displayBannerThin, buildMiniBar, divider} from '../helpers/format.js'
 import { isValidDate } from '../helpers/dates.js'
 import { filterTasksByDate, filterNotes, getAllTasks } from '../helpers/filters.js'
+import notifyTask from '../notifications/tasksNotifications.js'
+import notifyNote from '../notifications/notesNotifications.js'
 import { 
     createNoteFile, 
     readNoteFile, 
@@ -252,7 +254,7 @@ export default class ProjectsManager {
         }
     }
 
-    // <------------- PROJECT RELATED METHODS ------------->
+    // <------------- TASKS RELATED METHODS ------------->
 
     async addTaskToProjectByIndex(filePath, projectIndex) {
         try {
@@ -664,5 +666,33 @@ export default class ProjectsManager {
         const notePath = getNotePath(note.id)
 
         startEditor(notePath, note.title)
+    }
+
+    // Email System
+
+    async taskAutomatedReminder() {
+        const currentDate = new Date().toLocaleDateString()
+
+        const todayTasks = filterTasksByDate(this.projects, currentDate)
+        if (todayTasks.length === 0) {
+            logger.warn(`Automated tasks reminder has run yet no pending tasks for today\n\t\t Date: ${currentDate}\n\t\t The process has been terminated`)
+            return
+        }
+        
+        for (const task of todayTasks) {
+            await notifyTask(task)
+        }
+    }
+
+    async noteAutomatedReminder(projectIndex, noteIndex) {
+        validateProjectIndex(projectIndex, this.projects)
+        validateNoteIndex(noteIndex, projectIndex, this.projects)
+
+        const note = this.projects[projectIndex - 1].notes[noteIndex - 1]
+
+        const notePath = getNotePath(note.id)
+
+        await notifyNote(note, notePath)
+
     }
 }

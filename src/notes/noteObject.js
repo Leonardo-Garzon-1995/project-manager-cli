@@ -13,5 +13,4 @@ export default class Note {
     getPath() {
         return this.id
     }
-
 }

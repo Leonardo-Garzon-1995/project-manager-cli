@@ -9,7 +9,6 @@ const __dirname = path.dirname(__filename)
 const LOG_DIR = path.join(__dirname, '..', '..', 'logs')
 const LOG_FILE = path.join(LOG_DIR, 'pro_status.log')
 
-
 function ensureLogFile() {
     if (!fs.existsSync(LOG_DIR)) {
         fs.mkdirSync(LOG_DIR, {recursive: true})
@@ -30,7 +29,7 @@ function write(status, msg) {
     const output = msg instanceof Error ? util.inspect(msg, {
         depth: null,
         showHidden: true
-    }) : String(msg)
+    }) : msg
 
     const line = `[${getTimestamp()}][${status}] ${output}\n`
 
