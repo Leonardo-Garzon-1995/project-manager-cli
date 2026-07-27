@@ -1,5 +1,4 @@
-TODO-LIST
-
+node_modules/
 test.js
 test2.js
 
@@ -9,3 +8,4 @@ data/notes_data/
 logs/
 
 /src/ideas/
+*.env
