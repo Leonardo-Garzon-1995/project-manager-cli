@@ -58,10 +58,21 @@ class InvalidIndexError extends AppError {
     }
 }
 
+class NotificationError extends AppError {
+    constructor(message) {
+        super(message)
+
+        this.code = 'NOTIFICATION_ERROR'
+        this.code = 128
+    }
+}
+
 export {
     InvalidNoteIdError,
     CorruptedNoteError,
     ValidationError,
     InvalidIndexError,
-    NoteNotFoundError
+    NoteNotFoundError,
+
+    NotificationError
 }
