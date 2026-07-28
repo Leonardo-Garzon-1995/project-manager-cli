@@ -13,9 +13,9 @@ export async function initializeEnvironment() {
     } catch {
         await fs.writeFile(
             ENV_PATH,
-`RESEND_API_KEY=
-EMAIL=
-`,
+            `RESEND_API_KEY=
+            EMAIL=
+            `,
             "utf8"
         );
     }

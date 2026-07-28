@@ -1,12 +1,15 @@
-#!/usr/bin/node env
+#!/usr/bin/env node
 
 import * as logger from '../src/helpers/logger.js'
 import dispatch from '../src/index.js'
+import { initializeEnvironment } from '../src/config/env.js'
+
 const [,, command, ...args] = process.argv
 
-function main() {
+async function main() {
     try {
-        dispatch(command, args)
+        await initializeEnvironment()
+        await dispatch(command, args)
     } catch (error) {
         logger.error(error)
         console.error(error.message)

@@ -1,5 +1,3 @@
-// Import all the dispatch logic to this file
-
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import displayHelp  from './helpers/displayHelp.js'
@@ -16,7 +14,6 @@ import ProjectsManager from './projects/projects-manager.js'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const FILE = path.join(__dirname, '..','data', 'projects.json')
-
 
 const manager = new ProjectsManager(FILE)
 
