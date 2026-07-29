@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import displayHelp  from './helpers/displayHelp.js'
+import displayHelp  from './helpers/helpCmd/help.js'
 import { displayDeafultHeader } from './helpers/defaultUI.js'
 import projectCommand from './commands/projectCommand.js'
 import taskCommand from './commands/taskCommand.js'
@@ -44,7 +44,7 @@ export default function dispatch(cmd, args) {
                 break;
             case "help":
             case "-h":
-                displayHelp()
+                displayHelp(args)
                 break;
             default:
                 console.error(`   ${colors.red}Invalid command: <${cmd}>${colors.reset}\n`)

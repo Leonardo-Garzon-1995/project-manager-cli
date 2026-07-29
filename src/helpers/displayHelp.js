@@ -40,6 +40,9 @@ export default function displayHelp() {
     console.log(`           ${colors.cyan}all${colors.reset}`.padEnd(62, " ") + `Show all notes in all projects`)
     console.log(`           ${colors.cyan}clear ${colors.gray}<pro-index>${colors.reset}`.padEnd(67, " ") + `Clear all notes by project index`);
     console.log("")
+    console.log(`       Notification commands:`)
+    console.log(`       ${colors.brightyellow}automatedTaskReminder${colors.reset}`.padEnd(67, ' ') + 'filters the tasks of the day and sends an email to the project owner')
+    console.log(`       ${colors.brightyellow}noteAutomatedReminder ${colors.gray} <pro-index> <note-index> ${colors.reset}`.padEnd(67, " ") + 'sends the info and contents of a note to the project owner.')
     console.log(`       ${colors.cyan}help, -h${colors.reset}`.padEnd(62, " ") + `Display this help message`);
     console.log("")
 }
