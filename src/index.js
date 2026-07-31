@@ -5,6 +5,7 @@ import { displayDeafultHeader } from './helpers/defaultUI.js'
 import projectCommand from './commands/projectCommand.js'
 import taskCommand from './commands/taskCommand.js'
 import NoteCommand from './commands/noteCommand.js'
+import CalendarCommand from './commands/calendarCommand.js'
 import { colors } from './helpers/format.js'
 
 import * as logger from './helpers/logger.js'
@@ -42,6 +43,9 @@ export default function dispatch(cmd, args) {
             case 'note':
                 NoteCommand(args, manager, FILE)
                 break;
+            case 'cal':
+                CalendarCommand()
+                break
             case "help":
             case "-h":
                 displayHelp(args)
