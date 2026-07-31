@@ -26,6 +26,11 @@ const colors = {
     hidden: "\x1b[8m",
     strikethrough: "\x1b[9m",
     reset: "\x1b[0m",
+
+    // Background
+
+    bgGreen: "\x1b[42m",
+    bgCyan: "\x1b[46m"
 };
 
 function divider(num, color = colors.reset) {
