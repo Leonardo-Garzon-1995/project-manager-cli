@@ -33,6 +33,11 @@ export default {
             description: "Send a project note by email"
         },
         {
+            name: "calendar",
+            alias: "cal",
+            description: "create and manage calendars within projects"
+        },
+        {
             name: "help",
             alias: "-h",
             description: "Display help information"

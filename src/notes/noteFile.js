@@ -3,7 +3,7 @@ import path from 'path'
 import Note from './noteObject.js'
 import { validateNoteId } from '../helpers/validation.js'
 import { fileURLToPath } from 'node:url'
-import {NoteNotFoundError} from '../errors.js'
+import { NoteNotFoundError, ValidationError } from '../errors.js'
 
 const __filename  = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -21,15 +21,14 @@ function createNoteFile(noteObj, text) {
 
     const noteId = noteObj.getPath()
 
-    const fullPath = path.join(NOTES_DATA_DIR, noteId)
+    const fullPath = getNotePath(noteId)
 
     fs.writeFileSync(fullPath, text + '\n') 
 }
 
 function readNoteFile(noteId) {
-    validateNoteId(noteId)
 
-    const fullPath = path.join(NOTES_DATA_DIR, noteId)
+    const fullPath = getNotePath(noteId)
 
     if (!fs.existsSync(fullPath)) {
         throw new NoteNotFoundError(noteId)
@@ -47,9 +46,8 @@ function getNotePath(noteId) {
 }
 
 function appendToNoteFile(noteId, text) {
-    validateNoteId(noteId)
 
-    const fullPath = path.join(NOTES_DATA_DIR, noteId)
+    const fullPath = getNotePath(noteId)
     if (!fs.existsSync(fullPath)) {
         throw new NoteNotFoundError(noteId)
     }
@@ -60,9 +58,8 @@ function appendToNoteFile(noteId, text) {
 }
 
 function deleteNoteFile(noteId) {
-    validateNoteId(noteId)
 
-    const fullPath = path.join(NOTES_DATA_DIR, noteId)
+    const fullPath = getNotePath(noteId)
     if (!fs.existsSync(fullPath)) {
         throw new NoteNotFoundError(noteId)
     }
@@ -86,6 +83,37 @@ function createNoteFromFile(filePath, noteObject) {
     fs.copyFileSync(sourcePath, noteFilePath )
 }
 
+function resolveNoteId(noteName) {
+
+    if (!noteName || noteName.length < 8 || typeof noteName !== 'string') {
+        throw new ValidationError('A note id is required and must be at least 8 characters long.')
+    }
+
+    if (!noteName.startsWith('nte-')) {
+        throw new ValidationError(`The note id must start with 'nte-'. Received: ${noteName}`)
+    }
+    const files = fs.readdirSync(NOTES_DATA_DIR)
+    
+    const matches = files.filter(file => file.startsWith(noteName))
+
+    if (matches.length === 0) {
+        throw new NoteNotFoundError(noteName)
+    }
+
+    if (matches.length > 1) {
+        let numeration = 1
+        for (const match of matches) {
+            console.log('Candidates:\n')
+            console.log(`${numeration}. ${match}`)
+            numeration++
+        }
+
+        return 
+    }
+
+    return matches[0]
+}
+
 export {
     createNoteFile,
     readNoteFile,
@@ -93,6 +121,7 @@ export {
     deleteNoteFile,
     emptyNotesDir,
     appendToNoteFile,
-    createNoteFromFile
+    createNoteFromFile,
+    resolveNoteId
 }
 
