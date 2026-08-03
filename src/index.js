@@ -43,6 +43,7 @@ export default function dispatch(cmd, args) {
             case 'note':
                 NoteCommand(args, manager, FILE)
                 break;
+            case 'calendar':
             case 'cal':
                 CalendarCommand()
                 break
