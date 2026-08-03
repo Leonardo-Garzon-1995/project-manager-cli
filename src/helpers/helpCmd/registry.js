@@ -7,12 +7,14 @@ import general from "./general.js";
 import project from "./project.js";
 import task from "./task.js";
 import note from "./note.js";
+import calendar from "./calendar.js";
 // import notification from "./notification.js";
 
 const commands = {
     project,
     task,
     note,
+    calendar
     // notification
 };
 
