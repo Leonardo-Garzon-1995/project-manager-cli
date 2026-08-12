@@ -12,7 +12,8 @@ import {
     appendToNoteFile, 
     createNoteFromFile, 
     emptyNotesDir, 
-    getNotePath 
+    getNotePath,
+    resolveNoteId
 } from '../notes/noteFile.js'
 import  * as prompter from '../prompt/prompter.js'
 import { startEditor } from '../editor_mode/core/editor.js'
@@ -72,15 +73,19 @@ export default class ProjectsManager {
         try {
             validateProjectIndex(projectIndex, this.projects)
 
-            for (const note of (this.projects[projectIndex - 1].notes)) {
-                deleteNoteFile(note.id)
+            const project = this.projects[projectIndex - 1]
+
+            if (project.notes.length > 0) {
+                for (const note of (project.notes)) {
+                    deleteNoteFile(note.id)
+                }
             }
 
             const filtered = this.projects.filter((_, i) => i !== projectIndex - 1)
             this.projects = filtered
 
             StorageService.save(filePath, this.projects)
-            console.log(`\n${colors.green}\u2713 Project "${projectIndex}" deleted successfully!${colors.reset}`)
+            console.log(`\n${colors.green}\u2713 Project "${project.keyword}" deleted successfully!${colors.reset}`)
         
         } catch (error) {
             logger.error(error.stack)
@@ -107,7 +112,8 @@ export default class ProjectsManager {
 
                 console.log(`\n${colors.green}\u2713 AllProjects have been cleared successfully!${colors.reset}`)
             } catch (error) {
-                console.log(error.message)
+                console.error(error.message)
+                logger.error(error.stack)
             }
         }
     }
@@ -160,10 +166,10 @@ export default class ProjectsManager {
 
             StorageService.save(filePath, this.projects)
 
-            console.log(`\n${colors.green}\u2713 Project title updated susccesfully!${colors.reset}`)
+            console.log(`\n${colors.green}\u2713 Project title updated successfully!${colors.reset}`)
         } catch (error) {
             logger.error(error)
-            console.log(error.message)
+            console.error(error.message)
         }
     }
 
@@ -181,7 +187,7 @@ export default class ProjectsManager {
 
             StorageService.save(filePath, this.projects)
 
-            console.log(`\n${colors.green}\u2713 Project title updated susccesfully!${colors.reset}`)
+            console.log(`\n${colors.green}\u2713 Project description updated successfully!${colors.reset}`)
         } catch (error) {
             logger.error(error)
             console.error(error.message)
@@ -201,7 +207,7 @@ export default class ProjectsManager {
 
             StorageService.save(filePath, this.projects)
 
-            console.log(`\n${colors.green}\u2713 Project title updated susccesfully!${colors.reset}`)
+            console.log(`\n${colors.green}\u2713 Project keyword updated successfully!${colors.reset}`)
 
         } catch (error) {
             logger.error(error)
@@ -212,14 +218,15 @@ export default class ProjectsManager {
     toggleProjectImportance(filePath, projectIndex) {
         try {
             validateProjectIndex(projectIndex, this.projects)
+            const project = this.projects[projectIndex - 1]
 
-            this.projects[projectIndex -1].toggleHighImportance()
+            project.toggleHighImportance()
             StorageService.save(filePath, this.projects)
             
             if (this.projects[projectIndex -1].highImportance) {
-                console.log(`\n${colors.green}\u2713 Project at index ${projectIndex} has been marked as high importance.${colors.reset}`)
+                console.log(`\n${colors.green}\u2713 Project "${project.keyword}" has been marked as high importance.${colors.reset}`)
             } else {
-                console.log(`\n${colors.green}\u2713 Project at index ${projectIndex} has been marked as low importance.${colors.reset}`)
+                console.log(`\n${colors.green}\u2713 Project "${project.keyword}" has been marked as low importance.${colors.reset}`)
             }
         } catch (error) {
             logger.error(error.stack);
