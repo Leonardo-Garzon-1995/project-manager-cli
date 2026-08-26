@@ -1,4 +1,5 @@
 import path from 'node:path'
+import fs from 'fs'
 import { fileURLToPath } from 'node:url'
 import displayHelp  from './helpers/helpCmd/help.js'
 import { displayDeafultHeader } from './helpers/defaultUI.js'
@@ -14,7 +15,16 @@ import ProjectsManager from './projects/projects-manager.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-const FILE = path.join(__dirname, '..','data', 'projects.json')
+const DATA_DIR =  path.join(__dirname, '..', 'data')
+const FILE = path.join(DATA_DIR, 'projects.json')
+
+function ensureDataDir() {
+    if (!fs.existsSync(DATA_DIR)) {
+        fs.mkdirSync(DATA_DIR, { recursive: true })
+    }
+}
+
+ensureDataDir()
 
 const manager = new ProjectsManager(FILE)
 
