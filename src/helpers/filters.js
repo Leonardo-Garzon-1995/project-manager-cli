@@ -11,6 +11,8 @@ function filterTasksByDate(projects, date) {
         parsedDate = new Date(date).toLocaleDateString()
     }
 
+    
+
     const filterdbyDate = tasks.filter(t => t.dueDate === parsedDate)
 
     return filterdbyDate.length > 0 ? filterdbyDate : []
@@ -18,12 +20,13 @@ function filterTasksByDate(projects, date) {
 
 function getAllTasks(projects) {
     if (!projects || projects.length === 0) {
-        return
+        return []
     }
     const projectsWithTasks = projects.filter(p => p.tasks.length > 0)
     if (projectsWithTasks.length === 0) {
-        return 
+        return []
     }
+
     const tasks = []
 
     for (let i = 0; i < projectsWithTasks.length; i++) {
