@@ -17,6 +17,17 @@ export default class Project {
         this.tasks = []
         this.notes = []
     }
+
+    static fromJSON(obj) {
+        const project = Object.create(Project.prototype)
+        Object.assign(project, obj)
+
+        project.tasks = obj.tasks.map(t => Task.fromJSON(t))
+        project.notes = obj.notes.map(n => Note.fromJSON(n))
+
+
+        return project
+    }
     
     // Project affected-directly methods
     addTag(tag) {

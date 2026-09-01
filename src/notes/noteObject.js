@@ -9,6 +9,12 @@ export default class Note {
         this.createdAt = generateTimestamp()
         this.proKeyword = null
     }
+    static fromJSON(obj) {
+        const note = Object.create(Note.prototype)
+        Object.assign(note, obj)
+
+        return note
+    }
 
     getPath() {
         return this.id
