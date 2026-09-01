@@ -12,6 +12,13 @@ export default class Task {
         this.dueDate = null
     }
 
+    static fromJSON(obj) {
+        const task = Object.create(Task.prototype)
+        Object.assign(task, obj)
+
+        return task
+    }
+
     markAsCompleted() {
         this.completed = true
     }
