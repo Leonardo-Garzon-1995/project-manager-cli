@@ -13,7 +13,7 @@ async function main() {
         
         await dispatch(command, args)
     } catch (error) {
-        logger.error(error)
+        // logger.error(error)
         console.error(error.message)
         process.exit(error.exitCode ?? 1)
     }

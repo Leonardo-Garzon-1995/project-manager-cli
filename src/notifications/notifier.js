@@ -30,7 +30,7 @@ export default class Notify {
             logger.info(`Email has been succesfully sent. Email id: ${data.id}`)
             
         } catch(err) {
-            logger.error(err.stack)
+            throw err
         }
     }
 
@@ -54,7 +54,7 @@ export default class Notify {
             logger.info(`Task email has been succesfully sent. Email id: ${data.id}`)
             
         } catch(err) {
-            logger.error(err.stack)
+            throw err
         }
     }
 }

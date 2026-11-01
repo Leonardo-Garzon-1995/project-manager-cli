@@ -682,6 +682,7 @@ export default class ProjectsManager {
 
         const todayTasks = filterTasksByDate(this.projects, currentDate)
         if (todayTasks.length === 0) {
+            console.warn(`Automated tasks reminder has run yet no pending tasks for today\n\t\t Date: ${currentDate}\n\t\t The process has been terminated`)
             logger.warn(`Automated tasks reminder has run yet no pending tasks for today\n\t\t Date: ${currentDate}\n\t\t The process has been terminated`)
             return
         }

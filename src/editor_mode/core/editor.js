@@ -10,14 +10,14 @@ import EditorState from './state.js'
 
 const state = new EditorState()
 
-process.on('uncaughtException', (error) => {
+/*process.on('uncaughtException', (error) => {
     logger.error(error)
     
     process.stdin.setRawMode(false)
     process.stdin.pause()
 
     process.exit(1)
-})
+})*/
 
 function quitEditor() {
     process.stdin.setRawMode(false)

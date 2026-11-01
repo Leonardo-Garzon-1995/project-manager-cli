@@ -28,7 +28,7 @@ ensureDataDir()
 
 const manager = new ProjectsManager(FILE)
 
-export default function dispatch(cmd, args) {
+export default async function dispatch(cmd, args) {
     try {
         if (!cmd) {
             displayDeafultHeader()
@@ -38,10 +38,10 @@ export default function dispatch(cmd, args) {
         
         switch(cmd) {
             case 'automatedTaskReminder':
-                manager.taskAutomatedReminder()
+                await manager.taskAutomatedReminder()
                 break
             case 'noteAutomatedReminder':
-                manager.noteAutomatedReminder(args[0], args[1])
+                await manager.noteAutomatedReminder(args[0], args[1])
                 break
             case 'project':
             case 'pro':
